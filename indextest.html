@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RuneScape Bingo</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f1115;
+    color: #e6e6e6;
+}
+
+/* ================= BANNER ================= */
+.banner {
+    width: 100%;
+    height: 180px;
+    background-image: url("YOUR_BANNER.png");
+    background-size: cover;
+    background-position: center;
+    border-bottom: 2px solid #2a2f3a;
+}
+
+/* ================= COLORS ================= */
+:root {
+    --red: #e57373;
+    --green: #81c784;
+    --blue: #64b5f6;
+}
+
+/* ================= TEAMS ================= */
+.teams {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.team-card {
+    background: #151922;
+    padding: 12px;
+    border-radius: 10px;
+    width: 30%;
+    min-width: 250px;
+}
+
+.team-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.team-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* progress bars */
+.progress-container {
+    background: #2a2f3a;
+    height: 18px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+}
+
+/* team colors */
+#bar1 { background: var(--red); }
+#bar2 { background: var(--green); }
+#bar3 { background: var(--blue); }
+
+/* ================= BOARDS ================= */
+.boards {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    gap: 10px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    background: #151922;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* tiles bigger but still fit */
+.tile {
+    width: 75px;
+    height: 75px;
+    background: #222734;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+.tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tile.completed.red { background: var(--red); }
+.tile.completed.green { background: var(--green); }
+.tile.completed.blue { background: var(--blue); }
+
+.tile.completed::after {
+    content: "✔";
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="banner"></div>
+
+<!-- ================= TEAMS ================= -->
+<div class="teams">
+
+    <div class="team-card">
+        <div class="team-header">
+            <img src="team1.png">
+            <h3>Team 1</h3>
+        </div>
+        <div><span id="score1">0</span> / 25</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="bar1"></div>
+        </div>
+    </div>
+
+    <div class="team-card">
+        <div class="team-header">
+            <img src="team2.png">
+            <h3>Team 2</h3>
+        </div>
+        <div><span id="score2">0</span> / 25</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="bar2"></div>
+        </div>
+    </div>
+
+    <div class="team-card">
+        <div class="team-header">
+            <img src="team3.png">
+            <h3>Team 3</h3>
+        </div>
+        <div><span id="score3">0</span> / 25</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="bar3"></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= BOARDS ================= -->
+<div class="boards">
+
+    <div class="board" id="board1"></div>
+    <div class="board" id="board2"></div>
+    <div class="board" id="board3"></div>
+
+</div>
+
+<script>
+
+/* ================= CONFIG ================= */
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2FWpuuy2nZiDXoA1JlW90Vt65R1mAfW_3_ZNpI4ig0tdWJtKV4tg7uUj1QmYqox1fef2h4eokYHiD/pub?gid=0&single=true&output=csv";
+
+/* ================= TILE IMAGES ================= */
+const tileImages = [
+"tile1.png","tile2.png","tile3.png","tile4.png","tile5.png",
+"tile6.png","tile7.png","tile8.png","tile9.png","tile10.png",
+"tile11.png","tile12.png","tile13.png","tile14.png","tile15.png",
+"tile16.png","tile17.png","tile18.png","tile19.png","tile20.png",
+"tile21.png","tile22.png","tile23.png","tile24.png","tile25.png"
+];
+
+const COLORS = ["red", "green", "blue"];
+
+/* ================= BUILD BOARD ================= */
+function buildBoard(boardId, data, color) {
+    const board = document.getElementById(boardId);
+    board.innerHTML = "";
+
+    data.forEach((state, i) => {
+        const tile = document.createElement("div");
+        tile.className = "tile";
+
+        if (state) tile.classList.add("completed", color);
+
+        tile.innerHTML = `<img src="${tileImages[i]}">`;
+        board.appendChild(tile);
+    });
+}
+
+/* ================= UPDATE UI ================= */
+function updateScores(data) {
+
+    const teams = [data.team1, data.team2, data.team3];
+
+    teams.forEach((team, i) => {
+        const completed = team.filter(v => v).length;
+
+        document.getElementById(`score${i+1}`).innerText = completed;
+
+        const percent = (completed / 25) * 100;
+        document.getElementById(`bar${i+1}`).style.width = percent + "%";
+    });
+}
+
+/* ================= LOAD SHEET ================= */
+async function loadData() {
+    const res = await fetch(SHEET_URL);
+    const text = await res.text();
+
+    const rows = text.trim().split("\n").map(r => r.split(","));
+
+    // remove header row
+    rows.shift();
+
+    const team1 = [];
+    const team2 = [];
+    const team3 = [];
+
+    rows.forEach(r => {
+        team1.push(r[0].trim().toUpperCase() === "TRUE");
+        team2.push(r[1].trim().toUpperCase() === "TRUE");
+        team3.push(r[2].trim().toUpperCase() === "TRUE");
+    });
+
+    const data = { team1, team2, team3 };
+
+    buildBoard("board1", team1, "red");
+    buildBoard("board2", team2, "green");
+    buildBoard("board3", team3, "blue");
+
+    updateScores(data);
+}
+
+/* ================= AUTO REFRESH ================= */
+setInterval(loadData, 5000);
+loadData();
+
+</script>
+
+</body>
+</html>

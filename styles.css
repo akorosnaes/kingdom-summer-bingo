@@ -1,0 +1,320 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;600&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Inter', Arial;
+    background: #1a1a1a;
+    color: #eaeaea;
+}
+
+/* ================= BACKGROUND ================= */
+#bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+#bg-particles {
+    position: absolute;
+    inset: 0;
+}
+
+/* everything ABOVE background */
+.app {
+    position: relative;
+    z-index: 2;
+    isolation: isolate;
+}
+
+/* ================= PARTICLES ================= */
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: white;
+    opacity: 1;
+    animation: drift linear infinite;
+}
+
+@keyframes drift {
+    0% { transform: translateY(0); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(-120vh); opacity: 0; }
+}
+
+/* ================= BANNER ================= */
+.banner {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* ================= LAYOUT ================= */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+}
+
+/* ================= TEAMS ================= */
+.teams {
+    display: flex;
+    gap: 12px;
+}
+
+/* ================= TEAM CARDS (GLASS) ================= */
+.team-card {
+    width: 320px;
+    padding: 12px;
+    border-radius: 10px;
+
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.12);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+
+    position: relative;
+    overflow: hidden;
+}
+.team-card.red::before,
+.team-card.green::before,
+.team-card.blue::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.10; /* subtle but visible */
+    mix-blend-mode: screen;
+}
+
+/* RED */
+.team-card.red::before {
+    background: radial-gradient(
+        circle at top left,
+        rgba(255, 90, 90, 0.35),
+        transparent 65%
+    );
+}
+
+/* GREEN */
+.team-card.green::before {
+    background: radial-gradient(
+        circle at top left,
+        rgba(90, 255, 150, 0.30),
+        transparent 65%
+    );
+}
+
+/* BLUE */
+.team-card.blue::before {
+    background: radial-gradient(
+        circle at top left,
+        rgba(120, 190, 255, 0.65),
+        transparent 70%
+    );
+}
+
+
+/* ================= BOARDS ================= */
+.boards {
+    display: flex;
+    gap: 12px;
+}
+
+/* ================= BOARD (GLASS) ================= */
+.board {
+    width: 320px;
+
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+
+    padding: 10px;
+    border-radius: 10px;
+
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.10);
+
+    backdrop-filter: blur(8px);
+}
+
+/* ================= TILE ================= */
+.tile {
+    width: 58px;
+    height: 58px;
+
+    border-radius: 6px;
+    overflow: hidden;
+
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12);
+
+    position: relative;
+}
+
+.tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* hover */
+.tile:hover {
+    transform: translateY(-2px);
+}
+
+/* completed */
+.tile.completed.red { background: rgba(255,80,80,0.25); }
+.tile.completed.green { background: rgba(80,255,140,0.25); }
+.tile.completed.blue { background: rgba(80,160,255,0.25); }
+
+.tile.completed::after {
+    content: "✔";
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    font-size: 12px;
+}
+
+/* ================= PROGRESS ================= */
+.progress-container {
+    height: 10px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+.progress-bar.red { background: #ff5c5c; }
+.progress-bar.green { background: #5cff8a; }
+.progress-bar.blue { background: #5ca8ff; }
+
+/* ================= IN PROGRESS ================= */
+
+.tile.in-progress {
+    background: rgba(255, 215, 0, 0.25);
+    border: 1px solid rgba(255, 215, 0, 0.75);
+
+    box-shadow:
+        0 0 10px rgba(255, 215, 0, 0.30),
+        inset 0 0 8px rgba(255, 215, 0, 0.15);
+}
+
+/* ================= DROP LOG (UPDATED ONLY HERE) ================= */
+.drop-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 24px;
+}
+
+.drop-title {
+    width: 960px;
+    text-align: center;
+    margin-bottom: 8px;
+    opacity: 0.85;
+}
+
+.drop-panel {
+    width: 960px;
+    padding: 12px;
+
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 10px;
+
+    backdrop-filter: blur(8px);
+
+    display: flex;
+    flex-direction: column;
+}
+
+.drop-header {
+    display: grid;
+    grid-template-columns: 180px 1fr 160px;
+    padding: 6px;
+    opacity: 0.6;
+    font-size: 11px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 6px;
+}
+
+.drop-log {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    /* ✅ NEW FEATURE */
+    max-height: 240px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* scrollbar */
+.drop-log::-webkit-scrollbar {
+    width: 6px;
+}
+
+.drop-log::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+}
+
+.drop-log::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.drop-item {
+    display: grid;
+    grid-template-columns: 180px 1fr 160px;
+
+    padding: 6px 8px;
+
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+}
+.tooltip {
+    position: fixed;
+    z-index: 999999; /* 🔥 FIX: ensures above EVERYTHING */
+    pointer-events: none;
+
+    background: rgba(20,20,20,0.92);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px;
+    width: 210px;
+
+    font-size: 12px;
+    border-radius: 8px;
+
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+
+}

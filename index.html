@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OSRS Bingo Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- BACKGROUND LAYER (FIXED SYSTEM) -->
+<div id="bg-layer">
+    <div id="bg-particles"></div>
+</div>
+
+<div class="app">
+
+    <div class="banner">
+        <img src="images/banner.png" alt="OSRS Bingo Banner">
+    </div>
+
+    <div class="dashboard">
+
+        <div class="teams">
+
+            <div class="team-card red">
+                <div class="team-header">
+                    <img id="team1img">
+                    <h3 id="team1name"></h3>
+                </div>
+                <div><span id="score1">0</span> / 25</div>
+                <div class="progress-container">
+                    <div class="progress-bar red" id="bar1"></div>
+                </div>
+            </div>
+
+            <div class="team-card green">
+                <div class="team-header">
+                    <img id="team2img">
+                    <h3 id="team2name"></h3>
+                </div>
+                <div><span id="score2">0</span> / 25</div>
+                <div class="progress-container">
+                    <div class="progress-bar green" id="bar2"></div>
+                </div>
+            </div>
+
+            <div class="team-card blue">
+                <div class="team-header">
+                    <img id="team3img">
+                    <h3 id="team3name"></h3>
+                </div>
+                <div><span id="score3">0</span> / 25</div>
+                <div class="progress-container">
+                    <div class="progress-bar blue" id="bar3"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="boards">
+            <div class="board" id="board1"></div>
+            <div class="board" id="board2"></div>
+            <div class="board" id="board3"></div>
+        </div>
+
+        <!-- DROP LOG -->
+        <div class="drop-wrap">
+            <div class="drop-title">Drop Log</div>
+
+            <div class="drop-panel">
+                <div class="drop-header">
+                    <div>Time</div>
+                    <div>Drop</div>
+                    <div>Link</div>
+                </div>
+
+                <div id="dropLog" class="drop-log"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- TOOLTIP MUST EXIST -->
+<div id="tooltip" class="tooltip"></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+
+</body>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
