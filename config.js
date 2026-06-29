@@ -3,7 +3,7 @@ const CONFIG = {
     SHEET_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTZxyt-8zatBlU9VKkaY8BsPCQsBvNp5lq_jf-YaLBv4Pq5bm_kuGkmhytmMzRHc54hfbbS3tsnCZfn/pub?gid=99397328&single=true&output=csv",
 
     // Drop log sheet (SECOND TAB)
-    DROP_SHEET_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2FWpuuy2nZiDXoA1JlW90Vt65R1mAfW_3_ZNpI4ig0tdWJtKV4tg7uUj1QmYqox1fef2h4eokYHiD/pub?gid=1732365935&single=true&output=csv",
+    DROP_SHEET_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTZxyt-8zatBlU9VKkaY8BsPCQsBvNp5lq_jf-YaLBv4Pq5bm_kuGkmhytmMzRHc54hfbbS3tsnCZfn/pub?gid=735156483&single=true&output=csv",
 
     // ================= GAME SETTINGS =================
     GOAL: 25,
