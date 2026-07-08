@@ -4,6 +4,9 @@ const tooltip = document.getElementById("tooltip");
 
 let loading = false;
 
+let refreshID = 0;
+let lastBoardState = null;
+
 let tooltipX = 0;
 let tooltipY = 0;
 
@@ -15,7 +18,7 @@ let targetY = 0;
 
 init();
 
-load();
+setTimeout(load, 500);
 
 setInterval(load, 15000);
 
@@ -50,8 +53,10 @@ function init(){
 
 /* ================= LOAD ================= */
 
-
 async function load(){
+
+    const thisRefresh = ++refreshID;
+
 
     if(loading)
         return;
@@ -67,6 +72,19 @@ async function load(){
 
 
 
+        if(thisRefresh !== refreshID){
+
+            console.log(
+                "Ignoring stale sheet response"
+            );
+
+            loading=false;
+            return;
+
+        }
+
+
+
         if(!data){
 
             console.warn(
@@ -79,48 +97,111 @@ async function load(){
 
             data = await fetchSheet();
 
+
+            if(thisRefresh !== refreshID){
+
+                console.log(
+                    "Ignoring stale retry"
+                );
+
+                loading=false;
+                return;
+
+            }
+
         }
+
+
 
 
 
         if(data){
 
 
-            render(
-                "board1",
-                data.team1,
-                CONFIG.teams[0].color,
-                1
-            );
-
-
-            render(
-                "board2",
-                data.team2,
-                CONFIG.teams[1].color,
-                2
-            );
-
-
-            render(
-                "board3",
-                data.team3,
-                CONFIG.teams[2].color,
-                3
-            );
+            const currentState =
+                JSON.stringify(data);
 
 
 
-            updateScores(data);
+            /*
+                Only redraw if the sheet actually changed
+            */
 
+            if(
+                currentState !== lastBoardState
+            ){
+
+
+                console.log(
+                    "Board updated"
+                );
+
+
+                lastBoardState =
+                    currentState;
+
+
+
+                render(
+                    "board1",
+                    data.team1,
+                    CONFIG.teams[0].color,
+                    1
+                );
+
+
+                render(
+                    "board2",
+                    data.team2,
+                    CONFIG.teams[1].color,
+                    2
+                );
+
+
+                render(
+                    "board3",
+                    data.team3,
+                    CONFIG.teams[2].color,
+                    3
+                );
+
+
+
+                updateScores(data);
+
+
+            }
+            else{
+
+                console.log(
+                    "No board changes"
+                );
+
+            }
 
 
         }
 
 
 
+
+
         const drops =
             await fetchDropLog();
+
+
+
+        if(thisRefresh !== refreshID){
+
+            console.log(
+                "Ignoring stale drop response"
+            );
+
+            loading=false;
+            return;
+
+        }
+
 
 
         if(drops.length){
@@ -150,19 +231,6 @@ async function load(){
     loading=false;
 
 }
-
-
-
-function wait(ms){
-
-    return new Promise(
-        resolve=>setTimeout(resolve,ms)
-    );
-
-}
-
-
-
 /* ================= BOARD RENDER ================= */
 
 
