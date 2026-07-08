@@ -6,11 +6,11 @@ const CONFIG = {
     // =====================================================
 
     SHEET_URL:
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2FWpuuy2nZiDXoA1JlW90Vt65R1mAfW_3_ZNpI4ig0tdWJtKV4tg7uUj1QmYqox1fef2h4eokYHiD/pub?gid=0&single=true&output=csv&cachebust=1",
+    "https://docs.google.com/spreadsheets/d/1s3AwXgU57BIKf-tsVPoM-0ZE6yaeWiqfR0M18AaiJLk/gviz/tq?tqx=out:csv&gid=0",
 
 
     DROP_SHEET_URL:
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2FWpuuy2nZiDXoA1JlW90Vt65R1mAfW_3_ZNpI4ig0tdWJtKV4tg7uUj1QmYqox1fef2h4eokYHiD/pub?gid=1732365935&single=true&output=csv&cahcebust=1",
+    "https://docs.google.com/spreadsheets/d/1s3AwXgU57BIKf-tsVPoM-0ZE6yaeWiqfR0M18AaiJLk/gviz/tq?tqx=out:csv&gid=1732365935",
 
 
 
