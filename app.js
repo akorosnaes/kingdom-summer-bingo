@@ -1031,30 +1031,36 @@ async function fetchDropLog(){
         .map(row=>{
 
 
-            const c =
-                row.split(",");
+    const c =
+        row
+        .split(",")
+        .map(value =>
+            value
+            .trim()
+            .replace(/^"|"$/g,"")
+        );
 
 
 
-            return {
-
-                time:
-                    c[0] || "",
+    return {
 
 
-                text:
-                    c[1] || "",
+        time:
+            c[0] || "",
 
 
-                img:
-                    c[2] || ""
+        text:
+            c[1] || "",
 
 
-            };
+        img:
+            c[2] || ""
 
 
-        });
+    };
 
+
+});
 
 
     }
