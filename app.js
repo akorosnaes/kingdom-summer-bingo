@@ -3,6 +3,8 @@
 const tooltip = document.getElementById("tooltip");
 
 let loading = false;
+let pendingBoardState = null;
+let pendingCount = 0;
 
 let refreshID = 0;
 let lastBoardState = null;
@@ -118,27 +120,52 @@ async function load(){
         if(data){
 
 
-            const currentState =
-                JSON.stringify(data);
+const currentState =
+    JSON.stringify(data);
 
 
 
-            /*
-                Only redraw if the sheet actually changed
-            */
-
-            if(
-                currentState !== lastBoardState
-            ){
+if(currentState !== lastBoardState){
 
 
-                console.log(
-                    "Board updated"
-                );
+    if(currentState === pendingBoardState){
+
+        pendingCount++;
+
+    }
+    else{
+
+        pendingBoardState = currentState;
+        pendingCount = 1;
+
+    }
 
 
-                lastBoardState =
-                    currentState;
+
+    /*
+        Require two matching reads
+    */
+
+    if(pendingCount < 2){
+
+        console.log(
+            "Waiting for stable sheet data"
+        );
+
+        loading=false;
+        return;
+
+    }
+
+
+
+    console.log(
+        "Stable board update accepted"
+    );
+
+
+    lastBoardState = currentState;
+    pendingCount = 0;
 
 
 
