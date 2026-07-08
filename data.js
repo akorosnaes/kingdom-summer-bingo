@@ -124,8 +124,22 @@ async function fetchSheet(){
             .forEach(row=>{
 
 
+                /*
+                    gviz CSV returns:
+                    "TRUE","FALSE","FALSE"
+
+                    Strip quotes before parsing
+                */
+
+
                 const cols =
-                    row.split(",");
+                    row
+                    .split(",")
+                    .map(c=>
+                        c
+                        .trim()
+                        .replace(/^"|"$/g,"")
+                    );
 
 
 
@@ -209,12 +223,15 @@ async function fetchSheet(){
 
 
 
+
+
 function parseTileState(value){
 
 
     const v =
         String(value || "")
         .trim()
+        .replace(/^"|"$/g,"")
         .toUpperCase();
 
 
@@ -234,8 +251,8 @@ function parseTileState(value){
 
     return "empty";
 
-
 }
+
 
 
 
@@ -264,6 +281,10 @@ function normalize(arr){
 
 
 }
+
+
+
+
 
 
 
