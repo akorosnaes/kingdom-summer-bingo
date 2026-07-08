@@ -69,7 +69,7 @@ setTimeout(
 
 setInterval(
     load,
-    15000
+    5000
 );
 
 
