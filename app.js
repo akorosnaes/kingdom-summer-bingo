@@ -25,7 +25,7 @@ init();
 
 setTimeout(load, 500);
 
-setInterval(load, 15000);
+setInterval(load, 5000);
 
 
 
