@@ -1,47 +1,278 @@
-async function fetchSheet() {
-    const status = document.getElementById("statusText");
+/* ================= GOOGLE SHEET DATA ================= */
 
-    try {
-        const res = await fetch(CONFIG.SHEET_URL);
-        const text = await res.text();
 
-        const rows = text.trim().split(/\r?\n/).map(r => r.split(","));
-        rows.shift();
+async function fetchSheet(){
 
-        const t1 = [], t2 = [], t3 = [];
+    const MAX_ATTEMPTS = 3;
 
-        rows.forEach(r => {
-            if (!r || r.length < 3) return;
 
-            t1.push(clean(r[0]));
-            t2.push(clean(r[1]));
-            t3.push(clean(r[2]));
-        });
+    for(
+        let attempt = 1;
+        attempt <= MAX_ATTEMPTS;
+        attempt++
+    ){
 
-        status.innerText = "Live • Updated";
+        try{
 
-        return {
-            team1: normalize(t1),
-            team2: normalize(t2),
-            team3: normalize(t3)
-        };
 
-    } catch (err) {
-        status.innerText = "Disconnected • Retrying...";
-        return {
-            team1: Array(25).fill(false),
-            team2: Array(25).fill(false),
-            team3: Array(25).fill(false)
-        };
+            const url =
+                CONFIG.SHEET_URL +
+                "&t=" +
+                Date.now();
+
+
+
+            const res =
+                await fetch(
+                    url,
+                    {
+                        cache:"no-store"
+                    }
+                );
+
+
+
+            if(!res.ok){
+
+                throw new Error(
+                    "HTTP " + res.status
+                );
+
+            }
+
+
+
+            const text =
+                await res.text();
+
+
+
+            console.log(
+                "RAW SHEET RESPONSE:",
+                text
+            );
+
+
+
+            const clean =
+                text.trim();
+
+
+
+            /*
+                Google sometimes returns:
+                Loading...
+            */
+
+            if(
+                !clean ||
+                clean === "Loading..."
+            ){
+
+                throw new Error(
+                    "Invalid Google response"
+                );
+
+            }
+
+
+
+            const rows =
+                clean
+                .split(/\r?\n/)
+                .filter(
+                    r=>r.trim() !== ""
+                );
+
+
+
+            /*
+                Remove header row
+            */
+
+            rows.shift();
+
+
+
+            /*
+                Need 25 tiles
+            */
+
+            if(
+                rows.length < CONFIG.BOARD_SIZE
+            ){
+
+                throw new Error(
+                    "Invalid tile count"
+                );
+
+            }
+
+
+
+            const team1=[];
+            const team2=[];
+            const team3=[];
+
+
+
+            rows
+            .slice(
+                0,
+                CONFIG.BOARD_SIZE
+            )
+            .forEach(row=>{
+
+
+                const cols =
+                    row.split(",");
+
+
+
+                team1.push(
+                    parseTileState(cols[0])
+                );
+
+
+                team2.push(
+                    parseTileState(cols[1])
+                );
+
+
+                team3.push(
+                    parseTileState(cols[2])
+                );
+
+
+            });
+
+
+
+            return {
+
+
+                team1:
+                    normalize(team1),
+
+
+                team2:
+                    normalize(team2),
+
+
+                team3:
+                    normalize(team3)
+
+
+            };
+
+
+
+        }
+        catch(err){
+
+
+            console.warn(
+                `Sheet attempt ${attempt}/${MAX_ATTEMPTS} failed:`,
+                err.message
+            );
+
+
+
+            if(
+                attempt <
+                MAX_ATTEMPTS
+            ){
+
+                await wait(750);
+
+            }
+
+
+        }
+
     }
+
+
+
+    console.error(
+        "Google Sheet unavailable"
+    );
+
+
+    return null;
+
+
 }
 
-function clean(v) {
-    if (!v) return false;
-    return String(v).trim().toUpperCase() === "TRUE";
+
+
+
+
+
+function parseTileState(value){
+
+
+    const v =
+        String(value || "")
+        .trim()
+        .toUpperCase();
+
+
+
+    if(v==="TRUE")
+        return "complete";
+
+
+
+    if(
+        v==="IN PROGRESS" ||
+        v==="IN_PROGRESS"
+    )
+        return "progress";
+
+
+
+    return "empty";
+
+
 }
 
-function normalize(arr) {
-    while (arr.length < 25) arr.push(false);
-    return arr.slice(0, 25);
+
+
+
+
+
+
+function normalize(arr){
+
+
+    while(
+        arr.length <
+        CONFIG.BOARD_SIZE
+    ){
+
+        arr.push("empty");
+
+    }
+
+
+
+    return arr.slice(
+        0,
+        CONFIG.BOARD_SIZE
+    );
+
+
+}
+
+
+
+
+function wait(ms){
+
+    return new Promise(
+        resolve =>
+            setTimeout(resolve,ms)
+    );
+
 }
