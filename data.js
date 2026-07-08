@@ -17,7 +17,7 @@ async function fetchSheet(){
 
             const url =
                 CONFIG.SHEET_URL +
-                "&t=" +
+                "&_t=" +
                 Date.now();
 
 
