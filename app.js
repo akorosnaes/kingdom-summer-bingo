@@ -651,7 +651,7 @@ async function fetchDropLog(){
         const res =
             await fetch(
                 CONFIG.DROP_SHEET_URL +
-                "&t=" +
+                "&_t=" +
                 Date.now()
             );
 
