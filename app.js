@@ -6,13 +6,7 @@ let loading = false;
 
 
 /*
-    Board state protection
-
-    displayedBoardState:
-    What the user is currently seeing
-
-    pendingBoardState:
-    A possible new state waiting confirmation
+    BOARD STABILITY
 */
 
 let displayedBoardState = null;
@@ -20,6 +14,18 @@ let pendingBoardState = null;
 let pendingCount = 0;
 
 let firstLoad = true;
+
+
+/*
+    DROP LOG MEMORY
+
+    Append-only system.
+    Existing drops are never removed.
+*/
+
+let displayedDrops = [];
+
+
 
 let refreshID = 0;
 
@@ -31,13 +37,16 @@ let targetX = 0;
 let targetY = 0;
 
 
+
 /* ================= INIT ================= */
+
 
 init();
 
 setTimeout(load,500);
 
 setInterval(load,15000);
+
 
 
 
@@ -68,19 +77,24 @@ function init(){
 
 
 
+
 /* ================= LOAD ================= */
 
 
 async function load(){
 
-    const thisRefresh = ++refreshID;
+    const thisRefresh =
+        ++refreshID;
+
 
 
     if(loading)
         return;
 
 
+
     loading=true;
+
 
 
     try{
@@ -94,7 +108,7 @@ async function load(){
         if(thisRefresh !== refreshID){
 
             console.log(
-                "Ignoring stale response"
+                "Ignoring stale board response"
             );
 
             loading=false;
@@ -104,98 +118,27 @@ async function load(){
 
 
 
-        if(!data){
 
-            console.warn(
-                "Sheet unavailable"
-            );
-
-            loading=false;
-            return;
-
-        }
+        if(data){
 
 
 
-        const currentState =
-            JSON.stringify(data);
+            const currentState =
+                JSON.stringify(data);
 
-
-
-        /*
-            FIRST LOAD
-        */
-
-        if(firstLoad){
-
-            console.log(
-                "Initial board accepted"
-            );
-
-
-            displayedBoardState =
-                currentState;
-
-
-            firstLoad=false;
-
-
-            applyBoardUpdate(data);
-
-
-        }
-
-
-
-        /*
-            NORMAL UPDATES
-        */
-
-        else if(
-            currentState !== displayedBoardState
-        ){
-
-
-            /*
-                Ignore returning to
-                current displayed state
-            */
-
-            if(
-                currentState === pendingBoardState
-            ){
-
-                pendingCount++;
-
-            }
-            else{
-
-                pendingBoardState =
-                    currentState;
-
-                pendingCount=1;
-
-            }
-
-
-
-            console.log(
-                "Possible update:",
-                pendingCount
-            );
 
 
 
             /*
-                Require TWO identical
-                reads before accepting
+                FIRST LOAD
             */
 
-            if(pendingCount >= 2){
+
+            if(firstLoad){
 
 
                 console.log(
-                    "Confirmed board update"
+                    "Initial board accepted"
                 );
 
 
@@ -203,44 +146,120 @@ async function load(){
                     currentState;
 
 
-                pendingBoardState=null;
-                pendingCount=0;
+                firstLoad=false;
 
 
                 applyBoardUpdate(data);
 
 
             }
-            else{
+
+
+
+
+
+            /*
+                BOARD CHANGES
+            */
+
+
+            else if(
+                currentState !== displayedBoardState
+            ){
+
+
+
+                if(
+                    currentState === pendingBoardState
+                ){
+
+                    pendingCount++;
+
+                }
+
+                else{
+
+
+                    pendingBoardState =
+                        currentState;
+
+
+                    pendingCount=1;
+
+
+                }
+
+
 
                 console.log(
-                    "Waiting confirmation"
+                    "Possible board update:",
+                    pendingCount
                 );
+
+
+
+
+                /*
+                    Require two identical
+                    reads before accepting
+                */
+
+
+                if(pendingCount >= 2){
+
+
+
+                    console.log(
+                        "Confirmed board update"
+                    );
+
+
+
+                    displayedBoardState =
+                        currentState;
+
+
+                    pendingBoardState=null;
+                    pendingCount=0;
+
+
+
+                    applyBoardUpdate(data);
+
+
+                }
+
+
+            }
+
+            else{
+
+
+                pendingBoardState=null;
+                pendingCount=0;
+
+
+
+                console.log(
+                    "No board changes"
+                );
+
 
             }
 
 
         }
-        else{
-
-
-            /*
-                Current display matches
-                Google response
-            */
-
-            pendingBoardState=null;
-            pendingCount=0;
-
-
-            console.log(
-                "No board changes"
-            );
-
-        }
 
 
 
+
+
+        /*
+            DROP LOG UPDATE
+
+            Separate from board logic.
+            Append-only.
+        */
 
 
         const drops =
@@ -250,6 +269,10 @@ async function load(){
 
         if(thisRefresh !== refreshID){
 
+            console.log(
+                "Ignoring stale drop response"
+            );
+
             loading=false;
             return;
 
@@ -257,11 +280,9 @@ async function load(){
 
 
 
-        if(drops.length){
-
-            renderDropLog(drops);
-
-        }
+        updateDropLog(
+            drops
+        );
 
 
 
@@ -272,10 +293,12 @@ async function load(){
     }
     catch(err){
 
+
         console.error(
             "Dashboard error:",
             err
         );
+
 
     }
 
@@ -283,7 +306,9 @@ async function load(){
 
     loading=false;
 
+
 }
+
 
 
 
@@ -317,7 +342,6 @@ function applyBoardUpdate(data){
 
     updateScores(data);
 
-
 }
 
 
@@ -332,6 +356,7 @@ function render(id,team,color,boardNumber){
 
     const board =
         document.getElementById(id);
+
 
 
     board.innerHTML="";
@@ -376,21 +401,27 @@ function render(id,team,color,boardNumber){
 
 
 
+
         if(state==="complete"){
+
 
             tile.classList.add(
                 "completed",
                 color
             );
 
+
         }
+
 
 
         if(state==="progress"){
 
+
             tile.classList.add(
                 "in-progress"
             );
+
 
         }
 
@@ -407,6 +438,7 @@ function render(id,team,color,boardNumber){
         team,
         boardNumber
     );
+
 
 }
 /* ================= SCORING ================= */
@@ -490,13 +522,9 @@ function calculateScore(team){
 
 
 
-    const bingoCount =
-        calculateBingos(team);
-
-
-
     total +=
-        bingoCount * CONFIG.BINGO_BONUS;
+        calculateBingos(team) *
+        CONFIG.BINGO_BONUS;
 
 
 
@@ -518,32 +546,23 @@ function calculateBingos(team){
 
 
 
-    // rows
-
-    for(let row=0; row<5; row++){
+    for(let row=0;row<5;row++){
 
 
         let complete=true;
 
 
 
-        for(
-            let col=0;
-            col<5;
-            col++
-        ){
+        for(let col=0;col<5;col++){
 
 
             if(
-                team[row*5+col]
-                !==
-                "complete"
+                team[row*5+col] !== "complete"
             ){
 
                 complete=false;
 
             }
-
 
         }
 
@@ -551,38 +570,31 @@ function calculateBingos(team){
 
         if(complete)
             count++;
+
 
     }
 
 
 
 
-    // columns
 
-    for(let col=0; col<5; col++){
+    for(let col=0;col<5;col++){
 
 
         let complete=true;
 
 
 
-        for(
-            let row=0;
-            row<5;
-            row++
-        ){
+        for(let row=0;row<5;row++){
 
 
             if(
-                team[row*5+col]
-                !==
-                "complete"
+                team[row*5+col] !== "complete"
             ){
 
                 complete=false;
 
             }
-
 
         }
 
@@ -590,6 +602,7 @@ function calculateBingos(team){
 
         if(complete)
             count++;
+
 
     }
 
@@ -597,7 +610,9 @@ function calculateBingos(team){
 
     return count;
 
+
 }
+
 
 
 
@@ -609,31 +624,22 @@ function updateBingoIndicators(team,board){
 
 
 
-    // rows
-
-    for(
-        let row=0;
-        row<5;
-        row++
-    ){
+    for(let row=0;row<5;row++){
 
 
         let complete=true;
 
 
-        for(
-            let col=0;
-            col<5;
-            col++
-        ){
+        for(let col=0;col<5;col++){
 
 
             if(
-                team[row*5+col]
-                !==
-                "complete"
-            )
+                team[row*5+col] !== "complete"
+            ){
+
                 complete=false;
+
+            }
 
         }
 
@@ -647,6 +653,7 @@ function updateBingoIndicators(team,board){
 
         index++;
 
+
     }
 
 
@@ -657,31 +664,23 @@ function updateBingoIndicators(team,board){
 
 
 
-    // columns
-
-    for(
-        let col=0;
-        col<5;
-        col++
-    ){
+    for(let col=0;col<5;col++){
 
 
         let complete=true;
 
 
-        for(
-            let row=0;
-            row<5;
-            row++
-        ){
+
+        for(let row=0;row<5;row++){
 
 
             if(
-                team[row*5+col]
-                !==
-                "complete"
-            )
+                team[row*5+col] !== "complete"
+            ){
+
                 complete=false;
+
+            }
 
 
         }
@@ -696,6 +695,7 @@ function updateBingoIndicators(team,board){
 
         index++;
 
+
     }
 
 
@@ -704,14 +704,18 @@ function updateBingoIndicators(team,board){
 
 
 
+
 function toggleBingo(id,on){
+
 
     const el =
         document.getElementById(id);
 
 
+
     if(!el)
         return;
+
 
 
     el.classList.toggle(
@@ -719,7 +723,10 @@ function toggleBingo(id,on){
         on
     );
 
+
 }
+
+
 
 
 
@@ -727,7 +734,9 @@ function toggleBingo(id,on){
 /* ================= DROP LOG ================= */
 
 
+
 async function fetchDropLog(){
+
 
     try{
 
@@ -740,6 +749,7 @@ async function fetchDropLog(){
             );
 
 
+
         const text =
             await res.text();
 
@@ -749,18 +759,28 @@ async function fetchDropLog(){
         .trim()
         .split(/\r?\n/)
         .slice(1)
-        .map(r=>{
+        .map(row=>{
 
 
             const c =
-                r.split(",");
+                row.split(",");
+
 
 
             return {
 
-                time:c[0] || "",
-                text:c[1] || "",
-                img:c[2] || ""
+
+                time:
+                    c[0] || "",
+
+
+                text:
+                    c[1] || "",
+
+
+                img:
+                    c[2] || ""
+
 
             };
 
@@ -768,11 +788,18 @@ async function fetchDropLog(){
         });
 
 
-
     }
-    catch{
+    catch(err){
+
+
+        console.error(
+            "Drop log failed:",
+            err
+        );
+
 
         return [];
+
 
     }
 
@@ -782,7 +809,66 @@ async function fetchDropLog(){
 
 
 
-function renderDropLog(drops){
+
+/*
+    APPEND ONLY DROP LOG
+
+    - Never clears existing rows
+    - Never rewrites old rows
+    - Only adds new drops
+*/
+
+
+function updateDropLog(drops){
+
+
+    if(!drops.length)
+        return;
+
+
+
+    const newDrops =
+        drops.filter(drop=>{
+
+
+            return !displayedDrops.some(old=>
+
+
+                old.time === drop.time &&
+                old.text === drop.text &&
+                old.img === drop.img
+
+
+            );
+
+
+        });
+
+
+
+
+    if(!newDrops.length){
+
+
+        console.log(
+            "No new drops"
+        );
+
+
+        return;
+
+
+    }
+
+
+
+
+    console.log(
+        "Adding new drops:",
+        newDrops.length
+    );
+
+
 
 
     const el =
@@ -791,11 +877,15 @@ function renderDropLog(drops){
         );
 
 
-    el.innerHTML="";
 
 
+    newDrops.forEach(drop=>{
 
-    drops.forEach(d=>{
+
+        displayedDrops.push(
+            drop
+        );
+
 
 
         const row =
@@ -804,20 +894,23 @@ function renderDropLog(drops){
             );
 
 
+
         row.className =
             "drop-item";
 
 
 
-        row.innerHTML=
+        row.innerHTML =
         `
-        <div>${d.time}</div>
-        <div>${d.text}</div>
+        <div>${drop.time}</div>
+
+        <div>${drop.text}</div>
+
         <div>
         ${
-            d.img
+            drop.img
             ?
-            `<a href="${d.img}" target="_blank">view</a>`
+            `<a href="${drop.img}" target="_blank">view</a>`
             :
             ""
         }
@@ -837,15 +930,19 @@ function renderDropLog(drops){
 
 
 
+
+
 /* ================= PARTICLES ================= */
 
 
 function createParticles(){
 
+
     const container =
         document.getElementById(
             "bg-particles"
         );
+
 
 
     for(
@@ -854,21 +951,26 @@ function createParticles(){
         i++
     ){
 
+
         const p =
             document.createElement(
                 "div"
             );
 
 
+
         p.className="particle";
+
 
 
         p.style.left =
             Math.random()*100+"vw";
 
 
+
         p.style.top =
             Math.random()*100+"vh";
+
 
 
         p.style.animationDuration =
@@ -879,11 +981,16 @@ function createParticles(){
             +"s";
 
 
+
         container.appendChild(p);
+
 
     }
 
+
 }
+
+
 
 
 
@@ -906,12 +1013,13 @@ function bindTooltips(){
                 ];
 
 
+
             if(!meta)
                 return;
 
 
 
-            tooltip.innerHTML=
+            tooltip.innerHTML =
             `
             <strong>${meta.name}</strong>
             <br>
@@ -922,8 +1030,10 @@ function bindTooltips(){
 
             tooltip.style.opacity=1;
 
-            tooltip.style.transform=
-            "scale(1)";
+
+            tooltip.style.transform =
+                "scale(1)";
+
 
 
             setTarget(e);
@@ -933,16 +1043,22 @@ function bindTooltips(){
 
 
 
-        tile.onmousemove=setTarget;
+
+        tile.onmousemove =
+            setTarget;
+
 
 
 
         tile.onmouseleave=()=>{
 
+
             tooltip.style.opacity=0;
 
-            tooltip.style.transform=
-            "scale(.98)";
+
+            tooltip.style.transform =
+                "scale(.98)";
+
 
         };
 
@@ -955,16 +1071,22 @@ function bindTooltips(){
 
 
 
+
 function setTarget(e){
+
 
     targetX =
         e.clientX+14;
 
 
+
     targetY =
         e.clientY+14;
 
+
 }
+
+
 
 
 
@@ -990,6 +1112,7 @@ function animateTooltip(){
         tooltipX+"px";
 
 
+
     tooltip.style.top =
         tooltipY+"px";
 
@@ -998,5 +1121,6 @@ function animateTooltip(){
     requestAnimationFrame(
         animateTooltip
     );
+
 
 }
