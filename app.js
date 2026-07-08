@@ -4,9 +4,21 @@ const tooltip = document.getElementById("tooltip");
 
 let loading = false;
 
-let lastBoardState = null;
+
+/*
+    Board state protection
+
+    displayedBoardState:
+    What the user is currently seeing
+
+    pendingBoardState:
+    A possible new state waiting confirmation
+*/
+
+let displayedBoardState = null;
 let pendingBoardState = null;
 let pendingCount = 0;
+
 let firstLoad = true;
 
 let refreshID = 0;
@@ -23,9 +35,9 @@ let targetY = 0;
 
 init();
 
-setTimeout(load, 500);
+setTimeout(load,500);
 
-setInterval(load, 5000);
+setInterval(load,15000);
 
 
 
@@ -58,6 +70,7 @@ function init(){
 
 /* ================= LOAD ================= */
 
+
 async function load(){
 
     const thisRefresh = ++refreshID;
@@ -67,20 +80,21 @@ async function load(){
         return;
 
 
-    loading = true;
+    loading=true;
 
 
     try{
 
 
-        let data = await fetchSheet();
+        const data =
+            await fetchSheet();
 
 
 
         if(thisRefresh !== refreshID){
 
             console.log(
-                "Ignoring stale sheet response"
+                "Ignoring stale response"
             );
 
             loading=false;
@@ -93,88 +107,7 @@ async function load(){
         if(!data){
 
             console.warn(
-                "Retrying sheet..."
-            );
-
-
-            await wait(1000);
-
-
-            data = await fetchSheet();
-
-
-            if(thisRefresh !== refreshID){
-
-                console.log(
-                    "Ignoring stale retry"
-                );
-
-                loading=false;
-                return;
-
-            }
-
-        }
-
-
-
-
-
-        if(data){
-
-
-const currentState =
-    JSON.stringify(data);
-
-
-
-if(currentState !== lastBoardState){
-
-
-    /*
-        First load:
-        accept immediately
-    */
-
-    if(firstLoad){
-
-        console.log(
-            "Initial board load accepted"
-        );
-
-        firstLoad = false;
-
-        lastBoardState = currentState;
-
-    }
-
-
-    else{
-
-
-        if(currentState === pendingBoardState){
-
-            pendingCount++;
-
-        }
-        else{
-
-            pendingBoardState = currentState;
-            pendingCount = 1;
-
-        }
-
-
-
-        /*
-            Require one confirmation
-            before changing existing board
-        */
-
-        if(pendingCount < 2){
-
-            console.log(
-                "Waiting for stable sheet data"
+                "Sheet unavailable"
             );
 
             loading=false;
@@ -184,57 +117,125 @@ if(currentState !== lastBoardState){
 
 
 
-        console.log(
-            "Stable board update accepted"
-        );
-
-
-        lastBoardState = currentState;
-
-        pendingCount = 0;
-
-
-    }
+        const currentState =
+            JSON.stringify(data);
 
 
 
-                render(
-                    "board1",
-                    data.team1,
-                    CONFIG.teams[0].color,
-                    1
+        /*
+            FIRST LOAD
+        */
+
+        if(firstLoad){
+
+            console.log(
+                "Initial board accepted"
+            );
+
+
+            displayedBoardState =
+                currentState;
+
+
+            firstLoad=false;
+
+
+            applyBoardUpdate(data);
+
+
+        }
+
+
+
+        /*
+            NORMAL UPDATES
+        */
+
+        else if(
+            currentState !== displayedBoardState
+        ){
+
+
+            /*
+                Ignore returning to
+                current displayed state
+            */
+
+            if(
+                currentState === pendingBoardState
+            ){
+
+                pendingCount++;
+
+            }
+            else{
+
+                pendingBoardState =
+                    currentState;
+
+                pendingCount=1;
+
+            }
+
+
+
+            console.log(
+                "Possible update:",
+                pendingCount
+            );
+
+
+
+            /*
+                Require TWO identical
+                reads before accepting
+            */
+
+            if(pendingCount >= 2){
+
+
+                console.log(
+                    "Confirmed board update"
                 );
 
 
-                render(
-                    "board2",
-                    data.team2,
-                    CONFIG.teams[1].color,
-                    2
-                );
+                displayedBoardState =
+                    currentState;
 
 
-                render(
-                    "board3",
-                    data.team3,
-                    CONFIG.teams[2].color,
-                    3
-                );
+                pendingBoardState=null;
+                pendingCount=0;
 
 
-
-                updateScores(data);
+                applyBoardUpdate(data);
 
 
             }
             else{
 
                 console.log(
-                    "No board changes"
+                    "Waiting confirmation"
                 );
 
             }
 
+
+        }
+        else{
+
+
+            /*
+                Current display matches
+                Google response
+            */
+
+            pendingBoardState=null;
+            pendingCount=0;
+
+
+            console.log(
+                "No board changes"
+            );
 
         }
 
@@ -248,10 +249,6 @@ if(currentState !== lastBoardState){
 
 
         if(thisRefresh !== refreshID){
-
-            console.log(
-                "Ignoring stale drop response"
-            );
 
             loading=false;
             return;
@@ -287,6 +284,47 @@ if(currentState !== lastBoardState){
     loading=false;
 
 }
+
+
+
+
+function applyBoardUpdate(data){
+
+
+    render(
+        "board1",
+        data.team1,
+        CONFIG.teams[0].color,
+        1
+    );
+
+
+    render(
+        "board2",
+        data.team2,
+        CONFIG.teams[1].color,
+        2
+    );
+
+
+    render(
+        "board3",
+        data.team3,
+        CONFIG.teams[2].color,
+        3
+    );
+
+
+    updateScores(data);
+
+
+}
+
+
+
+
+
+
 /* ================= BOARD RENDER ================= */
 
 
@@ -314,15 +352,9 @@ function render(id,team,color,boardNumber){
 
 
 
-        /*
-            FIX TILE PATHS
-            Supports both:
-            images/tile1.png
-            tile1.png
-        */
-
         let img =
             CONFIG.tileImages[index];
+
 
 
         if(
@@ -377,10 +409,6 @@ function render(id,team,color,boardNumber){
     );
 
 }
-
-
-
-
 /* ================= SCORING ================= */
 
 
