@@ -1,95 +1,267 @@
 const CONFIG = {
-    // ================= GOOGLE SHEETS =================
-    SHEET_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2FWpuuy2nZiDXoA1JlW90Vt65R1mAfW_3_ZNpI4ig0tdWJtKV4tg7uUj1QmYqox1fef2h4eokYHiD/pub?gid=0&single=true&output=csv",
 
-    // Drop log sheet (SECOND TAB)
-    DROP_SHEET_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2FWpuuy2nZiDXoA1JlW90Vt65R1mAfW_3_ZNpI4ig0tdWJtKV4tg7uUj1QmYqox1fef2h4eokYHiD/pub?gid=1732365935&single=true&output=csv",
 
-    // ================= GAME SETTINGS =================
-    GOAL: 25,
+    // =====================================================
+    // GOOGLE SHEETS
+    // =====================================================
 
-    // ================= TEAMS =================
-    teams: [
-        {
-            name: "Team 1",
-            img: "images/team1.png",
-            color: "red"
-        },
-        {
-            name: "Team 2",
-            img: "images/team2.png",
-            color: "green"
-        },
-        {
-            name: "Team 3",
-            img: "images/team3.png",
-            color: "blue"
-        }
+    SHEET_URL:
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2FWpuuy2nZiDXoA1JlW90Vt65R1mAfW_3_ZNpI4ig0tdWJtKV4tg7uUj1QmYqox1fef2h4eokYHiD/pub?gid=0&single=true&output=csv",
+
+
+    DROP_SHEET_URL:
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2FWpuuy2nZiDXoA1JlW90Vt65R1mAfW_3_ZNpI4ig0tdWJtKV4tg7uUj1QmYqox1fef2h4eokYHiD/pub?gid=1732365935&single=true&output=csv",
+
+
+
+
+
+    // =====================================================
+    // GAME SETTINGS
+    // =====================================================
+
+    BOARD_SIZE: 25,
+
+
+
+    /*
+        ====================================================
+        TILE WEIGHTS
+        ====================================================
+
+        EDIT THESE VALUES ONLY
+
+        Tile positions:
+
+        1   2   3   4   5
+        6   7   8   9   10
+        11  12  13  14  15
+        16  17  18  19  20
+        21  22  23  24  25
+
+
+        Total tile points should equal:
+
+        613 points
+
+        BINGO BONUS:
+
+        10 possible rows/columns
+        20 points each
+
+        200 bonus points
+
+
+        TOTAL BOARD:
+
+        613 + 200 = 813
+
+    */
+
+
+    tileWeights: [
+
+        26, // Tile 1
+        37, // Tile 2
+        28, // Tile 3
+        16, // Tile 4
+        17, // Tile 5
+
+
+        18, // Tile 6
+        29, // Tile 7
+        11, // Tile 8
+        30, // Tile 9
+        33, // Tile 10
+
+
+        27, // Tile 11
+        17, // Tile 12
+        23, // Tile 13
+        22, // Tile 14
+        35, // Tile 15
+
+
+        19, // Tile 16
+        24, // Tile 17
+        29, // Tile 18
+        28, // Tile 19
+        20, // Tile 20
+
+
+        30, // Tile 21
+        18, // Tile 22
+        32, // Tile 23
+        28, // Tile 24
+        16,  // Tile 25
+
     ],
 
-    // ================= TILE IMAGES (MANUAL CONTROL) =================
+
+
+
+    /*
+        Bonus awarded for every completed row
+        or completed column
+    */
+
+    BINGO_BONUS: 20,
+
+
+
+
+
+    // Calculated automatically
+    get TILE_TOTAL(){
+
+        return this.tileWeights.reduce(
+            (a,b)=>a+b,
+            0
+        );
+
+    },
+
+
+
+    get TOTAL_POINTS(){
+
+        return (
+            this.TILE_TOTAL +
+            (10 * this.BINGO_BONUS)
+        );
+
+    },
+
+
+
+
+
+    // =====================================================
+    // TEAMS
+    // =====================================================
+
+
+    teams: [
+
+        {
+            name:
+            "Plankers Prolateriat",
+
+            img:
+            "images/team1.png",
+
+            color:
+            "red"
+        },
+
+
+        {
+            name:
+            "Tekie's Tickeaters",
+
+            img:
+            "images/team2.png",
+
+            color:
+            "blue"
+        },
+
+
+        {
+            name:
+            "Wet Arm",
+
+            img:
+            "images/team3.png",
+
+            color:
+            "green"
+        }
+
+    ],
+
+
+
+
+
+    // =====================================================
+    // TILE IMAGES
+    // =====================================================
+
     tileImages: [
+
         "images/tile1.png",
         "images/tile2.png",
         "images/tile3.png",
         "images/tile4.png",
-        "tile5.png",
+        "images/tile5.png",
 
-        "tile6.png",
-        "tile7.png",
-        "tile8.png",
-        "tile9.png",
-        "tile10.png",
+        "images/tile6.png",
+        "images/tile7.png",
+        "images/tile8.png",
+        "images/tile9.png",
+        "images/tile10.png",
 
-        "tile11.png",
-        "tile12.png",
-        "tile13.png",
-        "tile14.png",
-        "tile15.png",
+        "images/tile11.png",
+        "images/tile12.png",
+        "images/tile13.png",
+        "images/tile14.png",
+        "images/tile15.png",
 
-        "tile16.png",
-        "tile17.png",
-        "tile18.png",
-        "tile19.png",
-        "tile20.png",
+        "images/tile16.png",
+        "images/tile17.png",
+        "images/tile18.png",
+        "images/tile19.png",
+        "images/tile20.png",
 
-        "tile21.png",
-        "tile22.png",
-        "tile23.png",
-        "tile24.png",
-        "tile25.png"
+        "images/tile21.png",
+        "images/tile22.png",
+        "images/tile23.png",
+        "images/tile24.png",
+        "images/tile25.png"
+
     ],
 
-    // ================= TILE METADATA (EDIT THESE FREELY) =================
+
+
+
+
+    // =====================================================
+    // TILE TOOLTIP DATA
+    // =====================================================
+
     tileMeta: [
-        { name: "Tile 1",  desc: "Complete objective 1" },
-        { name: "Tile 2",  desc: "Complete objective 2" },
-        { name: "Tile 3",  desc: "Complete objective 3" },
-        { name: "Tile 4",  desc: "Complete objective 4" },
-        { name: "Tile 5",  desc: "Complete objective 5" },
 
-        { name: "Tile 6",  desc: "Complete objective 6" },
-        { name: "Tile 7",  desc: "Complete objective 7" },
-        { name: "Tile 8",  desc: "Complete objective 8" },
-        { name: "Tile 9",  desc: "Complete objective 9" },
-        { name: "Tile 10", desc: "Complete objective 10" },
+        { name:"Duke Sucellus", desc:"4 Vestige rolls from Duke [26]" },
+        { name:"Chambers of Xeric", desc:"8 Points (4 Megarare Table, 3 Ancestral Table, 2 Buckler Table/Dust, 1 Scroll Table/Kits [37]" },
+        { name:"Corrupted Gauntlet", desc:"4 Crystal armour seeds [28]" },
+        { name:"Araxxor", desc:"3 Noxious halberd pieces [16]" },
+        { name:"Vorkath", desc:"1 Unique (Non-head/Scaly Hide) [17]" },
 
-        { name: "Tile 11", desc: "Complete objective 11" },
-        { name: "Tile 12", desc: "Complete objective 12" },
-        { name: "Tile 13", desc: "Complete objective 13" },
-        { name: "Tile 14", desc: "Complete objective 14" },
-        { name: "Tile 15", desc: "Complete objective 15" },
+        { name:"Tormented Demons", desc:"2 Tormented synapses [18]" },
+        { name:"Singles Wildy Bosses", desc:"2/3 unique rings [29]" },
+        { name:"Barrows Brothers", desc:"2 Frankensets from Barrows (2 of each slot) [11]" },
+        { name:"Vardorvis", desc:"1 Virtus Piece [30]" },
+        { name:"Maggot King", desc:"2 Crimson Kistens [33]" },
 
-        { name: "Tile 16", desc: "Complete objective 16" },
-        { name: "Tile 17", desc: "Complete objective 17" },
-        { name: "Tile 18", desc: "Complete objective 18" },
-        { name: "Tile 19", desc: "Complete objective 19" },
-        { name: "Tile 20", desc: "Complete objective 20" },
+        { name:"King Black Dragon", desc:"Dragonic visage or Pet [27]" },
+        { name:"Nex", desc:"2 Uniques (Max 5 players in instance) [17]" },
+        { name:"Cerberus", desc:"3 Smouldering stones or Jar of Souls [23]" },
+        { name:"Grotesque Guardians", desc:"2 Granite hammers" },
+        { name:"Theatre of Blood", desc:"6 Points (4 Scythe, 3 Sang/Rapier, 2 Justiciar/Dust, 1 Avernic/Kit/Pet [35]" },
 
-        { name: "Tile 21", desc: "Complete objective 21" },
-        { name: "Tile 22", desc: "Complete objective 22" },
-        { name: "Tile 23", desc: "Complete objective 23" },
-        { name: "Tile 24", desc: "Complete objective 24" },
-        { name: "Tile 25", desc: "Complete objective 25" }
+        { name:"Phantom Muspah", desc:"5 Venator shards [19]" },
+        { name:"Leviathan/Whisperer", desc:"3 Chromium ingots [24]" },
+        { name:"Zulrah", desc:"3 Uncut Onyx or Mutagens [29]" },
+        { name:"Tombs of Amascut: Expert", desc:"4 Purples [28]" },
+        { name:"Doom", desc:"2 Eye of ayak or Treads [20]" },
+
+        { name:"Phosani's Nightmare", desc:"2 Non-Orb drops (No Egg/Pet/Jar) [30]" },
+        { name:"Abyssal Sire", desc:"8 Unsired [18" },
+        { name:"God Wars Dungeon", desc:"2 Unique hilts (No Ancient Hilt) [32]" },
+        { name:"Yama", desc:"2 Unique Oathplate [28]" },
+        { name:"Brutus", desc:"4 Pets [16]" }
+
     ]
+
 };
