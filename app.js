@@ -17,7 +17,7 @@ init();
 
 load();
 
-setInterval(load, 5000);
+setInterval(load, 15000);
 
 
 
