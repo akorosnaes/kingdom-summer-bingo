@@ -6,28 +6,39 @@ let loading = false;
 
 
 /*
-    BOARD STABILITY
-*/
+    BOARD MEMORY
 
+    Stores the board currently displayed.
+*/
 let displayedBoardState = null;
+
+
+/*
+    Candidate update waiting
+    for confirmation
+*/
 let pendingBoardState = null;
 let pendingCount = 0;
 
+
+/*
+    First successful load
+*/
 let firstLoad = true;
+
 
 
 /*
     DROP LOG MEMORY
 
     Append-only system.
-    Existing drops are never removed.
 */
-
 let displayedDrops = [];
 
 
 
 let refreshID = 0;
+
 
 
 let tooltipX = 0;
@@ -38,42 +49,68 @@ let targetY = 0;
 
 
 
+
 /* ================= INIT ================= */
 
 
 init();
 
-setTimeout(load,500);
 
-setInterval(load,15000);
+/*
+    Slight delay gives Google
+    Apps Script time to wake up
+*/
+setTimeout(
+    load,
+    1000
+);
+
+
+
+setInterval(
+    load,
+    15000
+);
+
 
 
 
 
 function init(){
 
+
     CONFIG.teams.forEach((team,index)=>{
+
 
         document.getElementById(
             `team${index+1}name`
-        ).innerText = team.name;
+        ).innerText =
+            team.name;
+
 
 
         document.getElementById(
             `team${index+1}img`
-        ).src = team.img;
+        ).src =
+            team.img;
+
 
     });
 
 
+
     createParticles();
+
 
 
     requestAnimationFrame(
         animateTooltip
     );
 
+
 }
+
+
 
 
 
@@ -82,6 +119,7 @@ function init(){
 
 
 async function load(){
+
 
     const thisRefresh =
         ++refreshID;
@@ -101,14 +139,16 @@ async function load(){
 
 
         const data =
-            await fetchSheet();
+            await getStableSheetData();
 
 
 
-        if(thisRefresh !== refreshID){
+        if(
+            thisRefresh !== refreshID
+        ){
 
             console.log(
-                "Ignoring stale board response"
+                "Ignoring stale response"
             );
 
             loading=false;
@@ -119,8 +159,8 @@ async function load(){
 
 
 
-        if(data){
 
+        if(data){
 
 
             const currentState =
@@ -129,10 +169,12 @@ async function load(){
 
 
 
+
             /*
                 FIRST LOAD
-            */
 
+                Accept immediately.
+            */
 
             if(firstLoad){
 
@@ -149,7 +191,9 @@ async function load(){
                 firstLoad=false;
 
 
-                applyBoardUpdate(data);
+                applyBoardUpdate(
+                    data
+                );
 
 
             }
@@ -159,9 +203,8 @@ async function load(){
 
 
             /*
-                BOARD CHANGES
+                NORMAL UPDATES
             */
-
 
             else if(
                 currentState !== displayedBoardState
@@ -179,38 +222,38 @@ async function load(){
 
                 else{
 
-
                     pendingBoardState =
                         currentState;
 
 
                     pendingCount=1;
 
-
                 }
 
 
 
+
                 console.log(
-                    "Possible board update:",
+                    "Possible update:",
                     pendingCount
                 );
 
 
 
 
+
                 /*
-                    Require two identical
-                    reads before accepting
+                    Require two matching
+                    reads before changing
                 */
 
-
-                if(pendingCount >= 2){
-
+                if(
+                    pendingCount >= 2
+                ){
 
 
                     console.log(
-                        "Confirmed board update"
+                        "Confirmed update"
                     );
 
 
@@ -219,15 +262,20 @@ async function load(){
                         currentState;
 
 
+
                     pendingBoardState=null;
+
                     pendingCount=0;
 
 
 
-                    applyBoardUpdate(data);
+                    applyBoardUpdate(
+                        data
+                    );
 
 
                 }
+
 
 
             }
@@ -236,8 +284,8 @@ async function load(){
 
 
                 pendingBoardState=null;
-                pendingCount=0;
 
+                pendingCount=0;
 
 
                 console.log(
@@ -255,23 +303,19 @@ async function load(){
 
 
         /*
-            DROP LOG UPDATE
+            DROP LOG
 
-            Separate from board logic.
-            Append-only.
+            handled separately
         */
-
 
         const drops =
             await fetchDropLog();
 
 
 
-        if(thisRefresh !== refreshID){
-
-            console.log(
-                "Ignoring stale drop response"
-            );
+        if(
+            thisRefresh !== refreshID
+        ){
 
             loading=false;
             return;
@@ -291,6 +335,7 @@ async function load(){
 
 
     }
+
     catch(err){
 
 
@@ -313,7 +358,94 @@ async function load(){
 
 
 
+
+
+/*
+    GOOGLE SHEET STARTUP PROTECTION
+
+
+    Prevents blank boards when
+    Google returns "Loading..."
+*/
+
+async function getStableSheetData(){
+
+
+    const attempts = 5;
+
+
+
+    for(
+        let i=1;
+        i<=attempts;
+        i++
+    ){
+
+
+        const data =
+            await fetchSheet();
+
+
+
+        if(data){
+
+
+            return data;
+
+
+        }
+
+
+
+        console.log(
+            `Waiting for sheet (${i}/${attempts})`
+        );
+
+
+
+        await wait(
+            1000
+        );
+
+
+    }
+
+
+
+    return null;
+
+
+}
+
+
+
+
+
+
+function wait(ms){
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                ms
+            )
+    );
+
+}
+
+
+
+
+
+
+
+
+/* ================= APPLY UPDATE ================= */
+
+
 function applyBoardUpdate(data){
+
 
 
     render(
@@ -324,12 +456,14 @@ function applyBoardUpdate(data){
     );
 
 
+
     render(
         "board2",
         data.team2,
         CONFIG.teams[1].color,
         2
     );
+
 
 
     render(
@@ -340,9 +474,15 @@ function applyBoardUpdate(data){
     );
 
 
-    updateScores(data);
+
+    updateScores(
+        data
+    );
+
 
 }
+
+
 
 
 
@@ -352,10 +492,32 @@ function applyBoardUpdate(data){
 /* ================= BOARD RENDER ================= */
 
 
-function render(id,team,color,boardNumber){
+function render(
+    id,
+    team,
+    color,
+    boardNumber
+){
+
 
     const board =
         document.getElementById(id);
+
+
+
+    if(
+        !team ||
+        team.length !== CONFIG.GOAL
+    ){
+
+        console.warn(
+            "Invalid board data, keeping current board"
+        );
+
+
+        return;
+
+    }
 
 
 
@@ -363,74 +525,90 @@ function render(id,team,color,boardNumber){
 
 
 
-    team.forEach((state,index)=>{
+    team.forEach(
+        (state,index)=>{
 
 
-        const tile =
-            document.createElement("div");
-
-
-        tile.className="tile";
-
-
-        tile.dataset.index=index;
+            const tile =
+                document.createElement(
+                    "div"
+                );
 
 
 
-        let img =
-            CONFIG.tileImages[index];
+            tile.className =
+                "tile";
 
 
 
-        if(
-            img &&
-            !img.startsWith("images/")
-        ){
-
-            img =
-            "images/" + img;
-
-        }
+            tile.dataset.index =
+                index;
 
 
 
-        tile.innerHTML =
-        `
-        <img src="${img}">
-        `;
+            let img =
+                CONFIG.tileImages[index];
+
+
+
+            if(
+                img &&
+                !img.startsWith("images/")
+            ){
+
+                img =
+                "images/" + img;
+
+            }
+
+
+
+            tile.innerHTML =
+            `
+            <img src="${img}">
+            `;
 
 
 
 
-        if(state==="complete"){
+
+            if(
+                state==="complete"
+            ){
+
+                tile.classList.add(
+                    "completed",
+                    color
+                );
+
+            }
 
 
-            tile.classList.add(
-                "completed",
-                color
+
+
+
+            if(
+                state==="progress"
+            ){
+
+                tile.classList.add(
+                    "in-progress"
+                );
+
+            }
+
+
+
+
+
+            board.appendChild(
+                tile
             );
 
 
         }
+    );
 
-
-
-        if(state==="progress"){
-
-
-            tile.classList.add(
-                "in-progress"
-            );
-
-
-        }
-
-
-
-        board.appendChild(tile);
-
-
-    });
 
 
 
@@ -447,7 +625,7 @@ function render(id,team,color,boardNumber){
 function updateScores(data){
 
 
-    const teams=[
+    const teams = [
 
         data.team1,
         data.team2,
@@ -457,38 +635,41 @@ function updateScores(data){
 
 
 
-    teams.forEach((team,index)=>{
+    teams.forEach(
+        (team,index)=>{
 
 
-        const score =
-            calculateScore(team);
-
-
-
-        document.getElementById(
-            `score${index+1}`
-        )
-        .innerText =
-            score;
+            const score =
+                calculateScore(team);
 
 
 
-        const percent =
-            Math.min(
-                100,
-                (score / CONFIG.TOTAL_POINTS) * 100
-            );
+            document.getElementById(
+                `score${index+1}`
+            )
+            .innerText =
+                score;
 
 
 
-        document.getElementById(
-            `bar${index+1}`
-        )
-        .style.width =
-            percent+"%";
+
+            const percent =
+                Math.min(
+                    100,
+                    (score / CONFIG.TOTAL_POINTS) * 100
+                );
 
 
-    });
+
+            document.getElementById(
+                `bar${index+1}`
+            )
+            .style.width =
+                percent + "%";
+
+
+        }
+    );
 
 
 }
@@ -496,10 +677,13 @@ function updateScores(data){
 
 
 
+
+
+
 function calculateScore(team){
 
 
-    let total=0;
+    let total = 0;
 
 
 
@@ -507,18 +691,19 @@ function calculateScore(team){
         (state,index)=>{
 
 
-            if(state==="complete"){
-
+            if(
+                state === "complete"
+            ){
 
                 total +=
                     CONFIG.tileWeights[index];
-
 
             }
 
 
         }
     );
+
 
 
 
@@ -530,7 +715,11 @@ function calculateScore(team){
 
     return total;
 
+
 }
+
+
+
 
 
 
@@ -542,18 +731,31 @@ function calculateScore(team){
 function calculateBingos(team){
 
 
-    let count=0;
+    let count = 0;
 
 
 
-    for(let row=0;row<5;row++){
+    /*
+        ROWS
+    */
+
+
+    for(
+        let row=0;
+        row<5;
+        row++
+    ){
 
 
         let complete=true;
 
 
 
-        for(let col=0;col<5;col++){
+        for(
+            let col=0;
+            col<5;
+            col++
+        ){
 
 
             if(
@@ -563,6 +765,7 @@ function calculateBingos(team){
                 complete=false;
 
             }
+
 
         }
 
@@ -578,14 +781,28 @@ function calculateBingos(team){
 
 
 
-    for(let col=0;col<5;col++){
+
+    /*
+        COLUMNS
+    */
+
+
+    for(
+        let col=0;
+        col<5;
+        col++
+    ){
 
 
         let complete=true;
 
 
 
-        for(let row=0;row<5;row++){
+        for(
+            let row=0;
+            row<5;
+            row++
+        ){
 
 
             if(
@@ -595,6 +812,7 @@ function calculateBingos(team){
                 complete=false;
 
             }
+
 
         }
 
@@ -617,20 +835,42 @@ function calculateBingos(team){
 
 
 
-function updateBingoIndicators(team,board){
+
+
+
+
+function updateBingoIndicators(
+    team,
+    board
+){
 
 
     let index=1;
 
 
 
-    for(let row=0;row<5;row++){
+    /*
+        SIDE BINGOS
+        ROWS
+    */
+
+
+    for(
+        let row=0;
+        row<5;
+        row++
+    ){
 
 
         let complete=true;
 
 
-        for(let col=0;col<5;col++){
+
+        for(
+            let col=0;
+            col<5;
+            col++
+        ){
 
 
             if(
@@ -641,7 +881,9 @@ function updateBingoIndicators(team,board){
 
             }
 
+
         }
+
 
 
 
@@ -649,6 +891,7 @@ function updateBingoIndicators(team,board){
             `b${board}-r${index}`,
             complete
         );
+
 
 
         index++;
@@ -660,18 +903,33 @@ function updateBingoIndicators(team,board){
 
 
 
+
     index=1;
 
 
 
-    for(let col=0;col<5;col++){
+    /*
+        BOTTOM BINGOS
+        COLUMNS
+    */
+
+
+    for(
+        let col=0;
+        col<5;
+        col++
+    ){
 
 
         let complete=true;
 
 
 
-        for(let row=0;row<5;row++){
+        for(
+            let row=0;
+            row<5;
+            row++
+        ){
 
 
             if(
@@ -687,10 +945,12 @@ function updateBingoIndicators(team,board){
 
 
 
+
         toggleBingo(
             `b${board}-c${index}`,
             complete
         );
+
 
 
         index++;
@@ -705,7 +965,12 @@ function updateBingoIndicators(team,board){
 
 
 
-function toggleBingo(id,on){
+
+
+function toggleBingo(
+    id,
+    on
+){
 
 
     const el =
@@ -731,8 +996,10 @@ function toggleBingo(id,on){
 
 
 
-/* ================= DROP LOG ================= */
 
+
+
+/* ================= DROP LOG ================= */
 
 
 async function fetchDropLog(){
@@ -755,6 +1022,7 @@ async function fetchDropLog(){
 
 
 
+
         return text
         .trim()
         .split(/\r?\n/)
@@ -768,7 +1036,6 @@ async function fetchDropLog(){
 
 
             return {
-
 
                 time:
                     c[0] || "",
@@ -788,7 +1055,10 @@ async function fetchDropLog(){
         });
 
 
+
     }
+
+
     catch(err){
 
 
@@ -810,63 +1080,54 @@ async function fetchDropLog(){
 
 
 
+
+
+
 /*
     APPEND ONLY DROP LOG
 
-    - Never clears existing rows
-    - Never rewrites old rows
-    - Only adds new drops
+    Existing entries remain.
+    New entries are appended.
 */
 
 
 function updateDropLog(drops){
 
 
-    if(!drops.length)
+    if(
+        !drops.length
+    )
         return;
+
 
 
 
     const newDrops =
-        drops.filter(drop=>{
+        drops.filter(
+            drop=>{
 
 
-            return !displayedDrops.some(old=>
+                return !displayedDrops.some(
+                    old =>
+
+                    old.time === drop.time &&
+                    old.text === drop.text &&
+                    old.img === drop.img
+
+                );
 
 
-                old.time === drop.time &&
-                old.text === drop.text &&
-                old.img === drop.img
-
-
-            );
-
-
-        });
-
-
-
-
-    if(!newDrops.length){
-
-
-        console.log(
-            "No new drops"
+            }
         );
 
 
+
+
+
+    if(
+        !newDrops.length
+    )
         return;
-
-
-    }
-
-
-
-
-    console.log(
-        "Adding new drops:",
-        newDrops.length
-    );
 
 
 
@@ -879,53 +1140,61 @@ function updateDropLog(drops){
 
 
 
-    newDrops.forEach(drop=>{
+
+    newDrops.forEach(
+        drop=>{
 
 
-        displayedDrops.push(
-            drop
-        );
-
-
-
-        const row =
-            document.createElement(
-                "div"
+            displayedDrops.push(
+                drop
             );
 
 
 
-        row.className =
-            "drop-item";
+            const row =
+                document.createElement(
+                    "div"
+                );
 
 
 
-        row.innerHTML =
-        `
-        <div>${drop.time}</div>
+            row.className =
+                "drop-item";
 
-        <div>${drop.text}</div>
 
-        <div>
-        ${
-            drop.img
-            ?
-            `<a href="${drop.img}" target="_blank">view</a>`
-            :
-            ""
+
+            row.innerHTML =
+            `
+            <div>${drop.time}</div>
+
+            <div>${drop.text}</div>
+
+            <div>
+            ${
+                drop.img
+                ?
+                `<a href="${drop.img}" target="_blank">view</a>`
+                :
+                ""
+            }
+            </div>
+            `;
+
+
+
+            el.appendChild(
+                row
+            );
+
+
         }
-        </div>
-        `;
-
-
-
-        el.appendChild(row);
-
-
-    });
+    );
 
 
 }
+
+
+
 
 
 
@@ -959,36 +1228,43 @@ function createParticles(){
 
 
 
-        p.className="particle";
+        p.className =
+            "particle";
 
 
 
         p.style.left =
-            Math.random()*100+"vw";
+            Math.random()*100 + "vw";
 
 
 
         p.style.top =
-            Math.random()*100+"vh";
+            Math.random()*100 + "vh";
 
 
 
         p.style.animationDuration =
             (
-                10+
+                10 +
                 Math.random()*20
             )
-            +"s";
+            + "s";
 
 
 
-        container.appendChild(p);
+        container.appendChild(
+            p
+        );
 
 
     }
 
 
 }
+
+
+
+
 
 
 
@@ -1004,7 +1280,7 @@ function bindTooltips(){
     .forEach(tile=>{
 
 
-        tile.onmouseenter=e=>{
+        tile.onmouseenter = e=>{
 
 
             const meta =
@@ -1019,6 +1295,7 @@ function bindTooltips(){
 
 
 
+
             tooltip.innerHTML =
             `
             <strong>${meta.name}</strong>
@@ -1028,7 +1305,9 @@ function bindTooltips(){
 
 
 
+
             tooltip.style.opacity=1;
+
 
 
             tooltip.style.transform =
@@ -1050,10 +1329,11 @@ function bindTooltips(){
 
 
 
-        tile.onmouseleave=()=>{
+        tile.onmouseleave = ()=>{
 
 
             tooltip.style.opacity=0;
+
 
 
             tooltip.style.transform =
@@ -1072,19 +1352,22 @@ function bindTooltips(){
 
 
 
+
+
 function setTarget(e){
 
 
     targetX =
-        e.clientX+14;
+        e.clientX + 14;
 
 
 
     targetY =
-        e.clientY+14;
+        e.clientY + 14;
 
 
 }
+
 
 
 
@@ -1097,24 +1380,25 @@ function animateTooltip(){
     tooltipX +=
         (
             targetX-tooltipX
-        )*.18;
+        ) * .18;
 
 
 
     tooltipY +=
         (
             targetY-tooltipY
-        )*.18;
+        ) * .18;
+
 
 
 
     tooltip.style.left =
-        tooltipX+"px";
+        tooltipX + "px";
 
 
 
     tooltip.style.top =
-        tooltipY+"px";
+        tooltipY + "px";
 
 
 
