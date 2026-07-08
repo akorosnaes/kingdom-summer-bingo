@@ -505,19 +505,20 @@ function render(
 
 
 
-    if(
-        !team ||
-        team.length !== CONFIG.GOAL
-    ){
+if(
+    !team ||
+    team.length !== 25
+){
 
-        console.warn(
-            "Invalid board data, keeping current board"
-        );
+    console.warn(
+        "Invalid board data, keeping current board",
+        team
+    );
 
 
-        return;
+    return;
 
-    }
+}
 
 
 
