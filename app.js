@@ -3,11 +3,14 @@
 const tooltip = document.getElementById("tooltip");
 
 let loading = false;
+
+let lastBoardState = null;
 let pendingBoardState = null;
 let pendingCount = 0;
+let firstLoad = true;
 
 let refreshID = 0;
-let lastBoardState = null;
+
 
 let tooltipX = 0;
 let tooltipY = 0;
@@ -128,44 +131,70 @@ const currentState =
 if(currentState !== lastBoardState){
 
 
-    if(currentState === pendingBoardState){
-
-        pendingCount++;
-
-    }
-    else{
-
-        pendingBoardState = currentState;
-        pendingCount = 1;
-
-    }
-
-
-
     /*
-        Require two matching reads
+        First load:
+        accept immediately
     */
 
-    if(pendingCount < 2){
+    if(firstLoad){
 
         console.log(
-            "Waiting for stable sheet data"
+            "Initial board load accepted"
         );
 
-        loading=false;
-        return;
+        firstLoad = false;
+
+        lastBoardState = currentState;
 
     }
 
 
-
-    console.log(
-        "Stable board update accepted"
-    );
+    else{
 
 
-    lastBoardState = currentState;
-    pendingCount = 0;
+        if(currentState === pendingBoardState){
+
+            pendingCount++;
+
+        }
+        else{
+
+            pendingBoardState = currentState;
+            pendingCount = 1;
+
+        }
+
+
+
+        /*
+            Require one confirmation
+            before changing existing board
+        */
+
+        if(pendingCount < 2){
+
+            console.log(
+                "Waiting for stable sheet data"
+            );
+
+            loading=false;
+            return;
+
+        }
+
+
+
+        console.log(
+            "Stable board update accepted"
+        );
+
+
+        lastBoardState = currentState;
+
+        pendingCount = 0;
+
+
+    }
 
 
 
