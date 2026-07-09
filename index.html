@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8" />
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>Kingdom Summer Bingo 2026</title>
@@ -16,7 +17,7 @@
 <body>
 
 
-<!-- BACKGROUND LAYER -->
+<!-- ================= BACKGROUND ================= -->
 
 <div id="bg-layer">
     <div id="bg-particles"></div>
@@ -27,10 +28,14 @@
 <div class="app">
 
 
+
+    <!-- ================= BANNER ================= -->
+
+
     <div class="banner">
 
-        <img 
-            src="images/banner.png" 
+        <img
+            src="images/banner.png"
             alt="OSRS Bingo Banner"
         >
 
@@ -39,185 +44,336 @@
 
 
 
+
     <div class="dashboard">
 
 
 
-        <!-- ================= TEAM CARDS ================= -->
 
 
-        <div class="teams">
+        <!-- ================================================= -->
+        <!-- TEAM SWIPE CONTAINER                            -->
+        <!-- DESKTOP = 3 COLUMNS                             -->
+        <!-- MOBILE = HORIZONTAL SWIPE                       -->
+        <!-- ================================================= -->
 
 
-            <div class="team-card red">
+        <div class="team-pages">
 
-                <div class="team-header">
 
-                    <img id="team1img">
 
-                    <h3 id="team1name"></h3>
 
-                </div>
 
+            <!-- ================= TEAM 1 ================= -->
 
-                <div>
-                    <span id="score1">0</span> / 813
-                </div>
 
+            <div class="team-page">
 
-                <div class="progress-container">
 
-                    <div
-                        class="progress-bar red"
-                        id="bar1">
-                    </div>
 
-                </div>
+                <!-- TEAM 1 CARD -->
 
-            </div>
 
+                <div class="team-card red">
 
 
+                    <div class="team-header">
 
 
-            <div class="team-card blue">
+                        <img id="team1img">
 
-                <div class="team-header">
 
-                    <img id="team2img">
+                        <h3 id="team1name"></h3>
 
-                    <h3 id="team2name"></h3>
 
-                </div>
-
-
-                <div>
-                    <span id="score2">0</span> / 813
-                </div>
-
-
-                <div class="progress-container">
-
-                    <div
-                        class="progress-bar blue"
-                        id="bar2">
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-
-
-            <div class="team-card green">
-
-                <div class="team-header">
-
-                    <img id="team3img">
-
-                    <h3 id="team3name"></h3>
-
-                </div>
-
-
-                <div>
-                    <span id="score3">0</span> / 813
-                </div>
-
-
-                <div class="progress-container">
-
-                    <div
-                        class="progress-bar green"
-                        id="bar3">
-                    </div>
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-
-        <!-- ================= BOARDS ================= -->
-
-
-        <div class="boards">
-
-
-
-            <!-- TEAM 1 -->
-
-            <div class="board-wrapper">
-
-
-                <div class="board-layout">
-
-
-                    <div 
-                        class="board"
-                        id="board1">
                     </div>
 
 
-                    <div class="bingo-side">
 
-                        <div class="bingo-box" id="b1-r1">
+                    <div>
+
+                        <span id="score1">0</span> / 813
+
+                    </div>
+
+
+
+                    <div class="progress-container">
+
+
+                        <div
+                            class="progress-bar red"
+                            id="bar1">
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+                <!-- TEAM 1 BOARD -->
+
+
+                <div class="board-wrapper">
+
+
+
+                    <div class="board-layout">
+
+
+
+                        <div
+                            class="board"
+                            id="board1">
+                        </div>
+
+
+
+
+
+                        <div class="bingo-side">
+
+
+                            <div class="bingo-box" id="b1-r1">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b1-r2">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b1-r3">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b1-r4">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b1-r5">
+                                BINGO
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+                    <div class="bingo-bottom">
+
+
+                        <div class="bingo-box" id="b1-c1">
                             BINGO
                         </div>
 
-                        <div class="bingo-box" id="b1-r2">
+
+                        <div class="bingo-box" id="b1-c2">
                             BINGO
                         </div>
 
-                        <div class="bingo-box" id="b1-r3">
+
+                        <div class="bingo-box" id="b1-c3">
                             BINGO
                         </div>
 
-                        <div class="bingo-box" id="b1-r4">
+
+                        <div class="bingo-box" id="b1-c4">
                             BINGO
                         </div>
 
-                        <div class="bingo-box" id="b1-r5">
+
+                        <div class="bingo-box" id="b1-c5">
                             BINGO
                         </div>
+
 
                     </div>
+
 
 
                 </div>
 
 
-                <div class="bingo-bottom">
 
-                    <div class="bingo-box" id="b1-c1">
-                        BINGO
+
+            </div>
+
+
+
+
+
+
+
+            <!-- ================= TEAM 2 ================= -->
+
+
+            <div class="team-page">
+
+
+
+                <!-- TEAM 2 CARD -->
+
+
+                <div class="team-card blue">
+
+
+                    <div class="team-header">
+
+
+                        <img id="team2img">
+
+
+                        <h3 id="team2name"></h3>
+
+
                     </div>
 
-                    <div class="bingo-box" id="b1-c2">
-                        BINGO
+
+
+                    <div>
+
+                        <span id="score2">0</span> / 813
+
                     </div>
 
-                    <div class="bingo-box" id="b1-c3">
-                        BINGO
+
+
+                    <div class="progress-container">
+
+
+                        <div
+                            class="progress-bar blue"
+                            id="bar2">
+                        </div>
+
+
                     </div>
 
-                    <div class="bingo-box" id="b1-c4">
-                        BINGO
-                    </div>
 
-                    <div class="bingo-box" id="b1-c5">
-                        BINGO
-                    </div>
 
                 </div>
+
+
+
+
+
+
+
+
+                <!-- TEAM 2 BOARD -->
+
+
+                <div class="board-wrapper">
+
+
+
+                    <div class="board-layout">
+
+
+
+                        <div
+                            class="board"
+                            id="board2">
+                        </div>
+
+
+
+
+
+                        <div class="bingo-side">
+
+
+                            <div class="bingo-box" id="b2-r1">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b2-r2">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b2-r3">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b2-r4">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b2-r5">
+                                BINGO
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+                    <div class="bingo-bottom">
+
+
+                        <div class="bingo-box" id="b2-c1">
+                            BINGO
+                        </div>
+
+
+                        <div class="bingo-box" id="b2-c2">
+                            BINGO
+                        </div>
+
+
+                        <div class="bingo-box" id="b2-c3">
+                            BINGO
+                        </div>
+
+
+                        <div class="bingo-box" id="b2-c4">
+                            BINGO
+                        </div>
+
+
+                        <div class="bingo-box" id="b2-c5">
+                            BINGO
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+
 
 
             </div>
@@ -229,45 +385,158 @@
 
 
 
-            <!-- TEAM 2 -->
 
 
-            <div class="board-wrapper">
+            <!-- ================= TEAM 3 ================= -->
 
 
-                <div class="board-layout">
+            <div class="team-page">
 
 
-                    <div
-                        class="board"
-                        id="board2">
+
+                <!-- TEAM 3 CARD -->
+
+
+                <div class="team-card green">
+
+
+                    <div class="team-header">
+
+
+                        <img id="team3img">
+
+
+                        <h3 id="team3name"></h3>
+
+
                     </div>
 
 
-                    <div class="bingo-side">
 
-                        <div class="bingo-box" id="b2-r1">BINGO</div>
-                        <div class="bingo-box" id="b2-r2">BINGO</div>
-                        <div class="bingo-box" id="b2-r3">BINGO</div>
-                        <div class="bingo-box" id="b2-r4">BINGO</div>
-                        <div class="bingo-box" id="b2-r5">BINGO</div>
+                    <div>
+
+                        <span id="score3">0</span> / 813
 
                     </div>
+
+
+
+                    <div class="progress-container">
+
+
+                        <div
+                            class="progress-bar green"
+                            id="bar3">
+                        </div>
+
+
+                    </div>
+
 
 
                 </div>
 
 
 
-                <div class="bingo-bottom">
 
-                    <div class="bingo-box" id="b2-c1">BINGO</div>
-                    <div class="bingo-box" id="b2-c2">BINGO</div>
-                    <div class="bingo-box" id="b2-c3">BINGO</div>
-                    <div class="bingo-box" id="b2-c4">BINGO</div>
-                    <div class="bingo-box" id="b2-c5">BINGO</div>
+
+
+
+
+                <!-- TEAM 3 BOARD -->
+
+
+                <div class="board-wrapper">
+
+
+
+                    <div class="board-layout">
+
+
+
+                        <div
+                            class="board"
+                            id="board3">
+                        </div>
+
+
+
+
+
+                        <div class="bingo-side">
+
+
+                            <div class="bingo-box" id="b3-r1">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b3-r2">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b3-r3">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b3-r4">
+                                BINGO
+                            </div>
+
+
+                            <div class="bingo-box" id="b3-r5">
+                                BINGO
+                            </div>
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+                    <div class="bingo-bottom">
+
+
+                        <div class="bingo-box" id="b3-c1">
+                            BINGO
+                        </div>
+
+
+                        <div class="bingo-box" id="b3-c2">
+                            BINGO
+                        </div>
+
+
+                        <div class="bingo-box" id="b3-c3">
+                            BINGO
+                        </div>
+
+
+                        <div class="bingo-box" id="b3-c4">
+                            BINGO
+                        </div>
+
+
+                        <div class="bingo-box" id="b3-c5">
+                            BINGO
+                        </div>
+
+
+                    </div>
+
+
 
                 </div>
+
+
 
 
             </div>
@@ -276,59 +545,15 @@
 
 
 
+        </div> <!-- END team-pages -->
 
+    <div class="team-dots">
 
+    <span class="team-dot active"></span>
+    <span class="team-dot"></span>
+    <span class="team-dot"></span>
 
-            <!-- TEAM 3 -->
-
-
-            <div class="board-wrapper">
-
-
-                <div class="board-layout">
-
-
-                    <div
-                        class="board"
-                        id="board3">
-                    </div>
-
-
-                    <div class="bingo-side">
-
-                        <div class="bingo-box" id="b3-r1">BINGO</div>
-                        <div class="bingo-box" id="b3-r2">BINGO</div>
-                        <div class="bingo-box" id="b3-r3">BINGO</div>
-                        <div class="bingo-box" id="b3-r4">BINGO</div>
-                        <div class="bingo-box" id="b3-r5">BINGO</div>
-
-                    </div>
-
-
-                </div>
-
-
-
-                <div class="bingo-bottom">
-
-                    <div class="bingo-box" id="b3-c1">BINGO</div>
-                    <div class="bingo-box" id="b3-c2">BINGO</div>
-                    <div class="bingo-box" id="b3-c3">BINGO</div>
-                    <div class="bingo-box" id="b3-c4">BINGO</div>
-                    <div class="bingo-box" id="b3-c5">BINGO</div>
-
-                </div>
-
-
-            </div>
-
-
-
-        </div>
-
-
-
-
+</div>
 
 
 
@@ -340,24 +565,43 @@
         <div class="drop-wrap">
 
 
+
             <div class="drop-title">
+
                 Drop Log
+
             </div>
+
+
 
 
 
             <div class="drop-panel">
 
 
+
                 <div class="drop-header">
 
-                    <div>Time</div>
 
-                    <div>Drop</div>
+                    <div>
+                        Time
+                    </div>
 
-                    <div>Link</div>
+
+                    <div>
+                        Drop
+                    </div>
+
+
+                    <div>
+                        Link
+                    </div>
+
 
                 </div>
+
+
+
 
 
 
@@ -367,20 +611,31 @@
                 </div>
 
 
+
+
             </div>
+
 
 
         </div>
 
 
 
-    </div>
 
 
-</div>
+    </div> <!-- END dashboard -->
 
 
 
+</div> <!-- END app -->
+
+
+
+
+
+
+
+<!-- ================= TOOLTIP ================= -->
 
 
 <div
@@ -388,28 +643,62 @@
     class="tooltip">
 </div>
 
+
+
+
+
+
+
+
+
+<!-- ================= FOOTER ================= -->
+
+
 <footer class="site-footer">
-    <div>
-        Made with ♥ by Sean for Kingdom
-    </div>
+
 
     <div>
-        <a href="https://discord.gg/kingdomclan" target="_blank">
-            discord.gg/kingdomclan
-        </a>
+
+        Made with ♥ by Sean for Kingdom
+
     </div>
+
+
+
+    <div>
+
+        <a
+            href="https://discord.gg/kingdomclan"
+            target="_blank">
+
+            discord.gg/kingdomclan
+
+        </a>
+
+
+    </div>
+
+
 </footer>
 
 
 
 
-<!-- LOAD ORDER -->
+
+
+
+
+<!-- ================= SCRIPTS ================= -->
+
 
 <script src="config.js"></script>
 
 <script src="data.js"></script>
 
 <script src="app.js"></script>
+
+
+
 
 
 
