@@ -3,6 +3,7 @@
 const tooltip = document.getElementById("tooltip");
 
 let loading = false;
+let currentTeamSlide = 0;
 
 
 /*
@@ -56,6 +57,7 @@ let targetY = 0;
 init();
 
 
+
 /*
     Slight delay gives Google
     Apps Script time to wake up
@@ -101,7 +103,7 @@ function init(){
 
     createParticles();
 
-
+    initTeamSwipeDots();
 
     requestAnimationFrame(
         animateTooltip
@@ -1413,5 +1415,58 @@ function animateTooltip(){
         animateTooltip
     );
 
+
+}
+function initTeamSwipeDots(){
+
+
+    const container =
+        document.querySelector(".team-pages");
+
+
+    const dots =
+        document.querySelectorAll(".team-dot");
+
+
+    if(!container || !dots.length)
+        return;
+
+
+
+    container.addEventListener(
+        "scroll",
+        ()=>{
+
+
+            const index =
+                Math.round(
+                    container.scrollLeft /
+                    container.clientWidth
+                );
+
+
+            if(index === currentTeamSlide)
+                return;
+
+
+
+            currentTeamSlide=index;
+
+
+
+            dots.forEach(
+                (dot,i)=>{
+
+                    dot.classList.toggle(
+                        "active",
+                        i===index
+                    );
+
+                }
+            );
+
+
+        }
+    );
 
 }
