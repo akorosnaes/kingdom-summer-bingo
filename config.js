@@ -247,7 +247,7 @@ const CONFIG = {
         { name:"King Black Dragon", desc:"Dragonic visage or Pet [27]" },
         { name:"Nex", desc:"2 Uniques (Max 5 players in instance) [17]" },
         { name:"Cerberus", desc:"3 Smouldering stones or Jar of Souls [23]" },
-        { name:"Grotesque Guardians", desc:"2 Granite hammers" },
+        { name:"Grotesque Guardians", desc:"2 Granite hammers [22]" },
         { name:"Theatre of Blood", desc:"6 Points (4 Scythe, 3 Sang/Rapier, 2 Justiciar/Dust, 1 Avernic/Kit/Pet [35]" },
 
         { name:"Phantom Muspah", desc:"5 Venator shards [19]" },
