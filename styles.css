@@ -1,21 +1,34 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;600&display=swap');
+
+
+
+/* ===================================================== */
+/* ================= GLOBAL ============================ */
+/* ===================================================== */
 
 
 body {
 
     margin:0;
 
-    font-family:'Inter', Arial;
+    font-family:'Inter', Arial, sans-serif;
 
     background:#1a1a1a;
 
     color:#eaeaea;
 
+    overflow-x:hidden;
+
 }
 
 
 
-/* ================= BACKGROUND ================= */
+
+
+/* ===================================================== */
+/* ================= BACKGROUND ======================== */
+/* ===================================================== */
 
 
 #bg-layer {
@@ -33,6 +46,7 @@ body {
 }
 
 
+
 #bg-particles {
 
     position:absolute;
@@ -41,9 +55,6 @@ body {
 
 }
 
-
-
-/* everything ABOVE background */
 
 
 .app {
@@ -58,7 +69,12 @@ body {
 
 
 
-/* ================= PARTICLES ================= */
+
+
+
+/* ===================================================== */
+/* ================= PARTICLES ========================= */
+/* ===================================================== */
 
 
 .particle {
@@ -83,6 +99,7 @@ body {
 
 @keyframes drift {
 
+
     0% {
 
         transform:translateY(0);
@@ -92,11 +109,13 @@ body {
     }
 
 
+
     10% {
 
         opacity:1;
 
     }
+
 
 
     100% {
@@ -111,7 +130,13 @@ body {
 
 
 
-/* ================= BANNER ================= */
+
+
+
+
+/* ===================================================== */
+/* ================= BANNER ============================= */
+/* ===================================================== */
 
 
 .banner {
@@ -140,13 +165,17 @@ body {
 
     object-fit:contain;
 
-    display:block;
-
 }
 
 
 
-/* ================= LAYOUT ================= */
+
+
+
+
+/* ===================================================== */
+/* ================= MAIN DASHBOARD ==================== */
+/* ===================================================== */
 
 
 .dashboard {
@@ -157,7 +186,7 @@ body {
 
     align-items:center;
 
-    gap:14px;
+    gap:18px;
 
     padding:16px;
 
@@ -165,28 +194,64 @@ body {
 
 
 
-/* ================= TEAMS ================= */
 
-.teams {
-    
-    justify-content:center;
-    
+
+
+
+
+/* ===================================================== */
+/* ================= TEAM SWIPE CONTAINER ============== */
+/* ===================================================== */
+
+
+.team-pages {
+
     display:flex;
 
-    gap:12px;
+    gap:20px;
 
-    align-items:stretch;
+    justify-content:center;
+
+    width:100%;
 
 }
 
 
 
-/* ================= TEAM CARDS ================= */
+
+
+
+
+/* ===================================================== */
+/* ================= TEAM PAGE ========================= */
+/* ===================================================== */
+
+
+.team-page {
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+
+
+
+
+
+/* ===================================================== */
+/* ================= TEAM CARD ========================= */
+/* ===================================================== */
 
 
 .team-card {
 
-    width:408px;
+    width:405px;
 
     box-sizing:border-box;
 
@@ -200,9 +265,11 @@ body {
         rgba(255,255,255,0.03);
 
 
+
     border:
 
         1px solid rgba(255,255,255,0.12);
+
 
 
     backdrop-filter:blur(10px);
@@ -210,11 +277,13 @@ body {
     -webkit-backdrop-filter:blur(10px);
 
 
+
     box-shadow:
 
-        0 10px 30px rgba(0,0,0,0.35),
+        0 10px 30px rgba(0,0,0,.35),
 
-        inset 0 1px 0 rgba(255,255,255,0.04);
+        inset 0 1px 0 rgba(255,255,255,.04);
+
 
 
     position:relative;
@@ -223,18 +292,23 @@ body {
 
 }
 
-/* spacing between score and progress bar */
+
+
 .team-card > div:nth-child(2) {
-    margin-bottom: 14px;
+
+    margin-bottom:14px;
+
 }
+
+
 
 
 
 .team-card.red::before,
 
-.team-card.green::before,
+.team-card.blue::before,
 
-.team-card.blue::before {
+.team-card.green::before {
 
 
     content:"";
@@ -245,7 +319,7 @@ body {
 
     pointer-events:none;
 
-    opacity:.10;
+    opacity:.1;
 
     mix-blend-mode:screen;
 
@@ -253,8 +327,8 @@ body {
 
 
 
-.team-card.red::before {
 
+.team-card.red::before {
 
     background:
 
@@ -272,27 +346,7 @@ body {
 
 
 
-.team-card.green::before {
-
-
-    background:
-
-    radial-gradient(
-
-        circle at top left,
-
-        rgba(90,255,150,.30),
-
-        transparent 65%
-
-    );
-
-}
-
-
-
 .team-card.blue::before {
-
 
     background:
 
@@ -310,21 +364,90 @@ body {
 
 
 
-/* ================= BOARDS ================= */
+.team-card.green::before {
 
+    background:
 
-.boards {
-    justify-content:center;
-    padding:10px;
-    display:flex;
+    radial-gradient(
 
-    gap:12px;
+        circle at top left,
+
+        rgba(90,255,150,.30),
+
+        transparent 65%
+
+    );
 
 }
 
 
 
-/* ================= BOARD ================= */
+
+
+.team-header {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+
+
+.team-header img {
+
+    width:36px;
+
+    height:36px;
+
+    object-fit:contain;
+
+}
+
+
+
+.team-header h3 {
+
+    margin:0;
+
+    font-size:16px;
+
+}
+
+
+/* ===================================================== */
+/* ================= BOARDS ============================= */
+/* ===================================================== */
+
+
+.board-wrapper {
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+
+
+
+
+.board-layout {
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:6px;
+
+}
+
+
+
 
 
 .board {
@@ -335,7 +458,9 @@ body {
 
     display:grid;
 
+
     grid-template-columns:repeat(5,1fr);
+
 
     gap:6px;
 
@@ -346,9 +471,11 @@ body {
     border-radius:10px;
 
 
+
     background:
 
         rgba(255,255,255,.03);
+
 
 
     border:
@@ -356,13 +483,24 @@ body {
         1px solid rgba(255,255,255,.10);
 
 
+
     backdrop-filter:blur(8px);
+
+    -webkit-backdrop-filter:blur(8px);
+
 
 }
 
 
 
-/* ================= TILES ================= */
+
+
+
+
+
+/* ===================================================== */
+/* ================= TILES ============================== */
+/* ===================================================== */
 
 
 .tile {
@@ -384,12 +522,15 @@ body {
         rgba(255,255,255,.04);
 
 
+
     border:
 
         1px solid rgba(255,255,255,.12);
 
 
+
     position:relative;
+
 
 }
 
@@ -402,13 +543,12 @@ body {
 
     height:100%;
 
+
     object-fit:cover;
+
 
 }
 
-
-
-/* hover */
 
 
 .tile:hover {
@@ -416,11 +556,15 @@ body {
 
     transform:translateY(-2px);
 
+
 }
 
 
 
-/* completed */
+
+
+
+/* ================= COMPLETED ========================== */
 
 
 .tile.completed.red {
@@ -428,7 +572,8 @@ body {
 
     background:
 
-    rgba(255,80,80,.25);
+        rgba(255,80,80,.25);
+
 
 }
 
@@ -439,7 +584,8 @@ body {
 
     background:
 
-    rgba(80,255,140,.25);
+        rgba(80,255,140,.25);
+
 
 }
 
@@ -450,7 +596,8 @@ body {
 
     background:
 
-    rgba(80,160,255,.25);
+        rgba(80,160,255,.25);
+
 
 }
 
@@ -473,11 +620,58 @@ body {
 
     font-size:12px;
 
+
 }
 
 
 
-/* ================= PROGRESS ================= */
+
+
+
+
+
+/* ===================================================== */
+/* ================= IN PROGRESS ======================== */
+/* ===================================================== */
+
+
+.tile.in-progress {
+
+
+    background:
+
+        rgba(255,215,0,.25);
+
+
+
+    border:
+
+        1px solid rgba(255,215,0,.75);
+
+
+
+
+    box-shadow:
+
+
+        0 0 10px rgba(255,215,0,.30),
+
+
+        inset 0 0 8px rgba(255,215,0,.15);
+
+
+}
+
+
+
+
+
+
+
+
+/* ===================================================== */
+/* ================= PROGRESS BAR ======================= */
+/* ===================================================== */
 
 
 .progress-container {
@@ -488,13 +682,15 @@ body {
 
     background:
 
-    rgba(0,0,0,.4);
+        rgba(0,0,0,.4);
+
 
 
     border-radius:6px;
 
 
     overflow:hidden;
+
 
 }
 
@@ -511,7 +707,8 @@ body {
 
     transition:
 
-    width .5s ease;
+        width .5s ease;
+
 
 }
 
@@ -522,15 +719,9 @@ body {
 
     background:#ff5c5c;
 
-}
-
-
-.progress-bar.green {
-
-
-    background:#5cff8a;
 
 }
+
 
 
 .progress-bar.blue {
@@ -538,161 +729,176 @@ body {
 
     background:#5ca8ff;
 
+
+}
+
+
+
+.progress-bar.green {
+
+
+    background:#5cff8a;
+
+
 }
 
 
 
-/* ================= IN PROGRESS ================= */
-
-
-.tile.in-progress {
-
-
-    background:
-
-    rgba(255,215,0,.25);
-
-
-    border:
-
-    1px solid rgba(255,215,0,.75);
 
 
 
-    box-shadow:
 
 
-        0 0 10px rgba(255,215,0,.30),
-
-        inset 0 0 8px rgba(255,215,0,.15);
-
-}
-/* ================= BOARD WRAPPER ================= */
-
-.board-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
 
 
-/* board + right bingo column */
-.board-layout {
-    display: flex;
-    align-items: flex-start;
-    gap: 6px;
-}
+/* ===================================================== */
+/* ================= BINGO INDICATORS ================== */
+/* ===================================================== */
 
-
-/* ================= RIGHT SIDE BINGO ================= */
 
 .bingo-side {
 
-    display: grid;
 
-    grid-template-rows: repeat(5, 58px);
+    display:grid;
 
-    gap: 9px;
 
-    margin-top: 10px;
+    grid-template-rows:repeat(5,58px);
+
+
+    gap:9px;
+
+
+    margin-top:10px;
+
 
 }
 
 
-/* ================= BOTTOM BINGO ================= */
+
+
 
 .bingo-bottom {
 
-    display: grid;
 
-    grid-template-columns: repeat(5, 58px);
+    display:grid;
 
-    gap: 9px;
 
-    margin-top: 6px;
+    grid-template-columns:repeat(5,58px);
 
-    margin-left: 10px;
+
+    gap:9px;
+
+
+    margin-top:6px;
+
+
+    margin-left:10px;
+
 
 }
 
 
 
-/* ================= BINGO BOX ================= */
+
+
 
 .bingo-box {
 
-    height: 58px;
-    
-    width: 58px;
 
-    gap: 6px;
-    
-    display: flex;
+    width:58px;
 
-    align-items: center;
 
-    justify-content: center;
+    height:58px;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
 
 
     background:
-        rgba(255,255,255,0.04);
+
+        rgba(255,255,255,.04);
+
 
 
     border:
 
-        1px solid
-        rgba(255,255,255,0.12);
+        1px solid rgba(255,255,255,.12);
 
 
-    border-radius: 6px;
+
+    border-radius:6px;
 
 
-    font-size: 9px;
 
-    font-weight: 700;
+    font-size:9px;
 
 
-    letter-spacing: 1px;
+    font-weight:700;
+
+
+    letter-spacing:1px;
+
 
 
     color:
-        rgba(255,255,255,0.45);
+
+        rgba(255,255,255,.45);
 
 
-    backdrop-filter:
-        blur(8px);
+
+    backdrop-filter:blur(8px);
 
 
-    transition:
-        0.2s ease;
+
+    transition:.2s ease;
+
 
 }
 
 
 
-/* completed bingo */
+
+
 
 .bingo-box.active {
 
+
     background:
-        rgba(80,255,140,0.25);
+
+        rgba(80,255,140,.25);
+
+
 
     border-color:
-        rgba(80,255,140,0.85);
 
-    color:
-        #5cff8a;
+        rgba(80,255,140,.85);
+
+
+
+    color:#5cff8a;
+
+
 
     box-shadow:
 
-        0 0 12px
-        rgba(80,255,140,0.45);
+
+        0 0 12px rgba(80,255,140,.45);
+
 
 }
 
 
+/* ===================================================== */
+/* ================= DROP LOG =========================== */
+/* ===================================================== */
 
-/* ================= DROP LOG ================= */
 
 
 .drop-wrap {
@@ -717,6 +923,8 @@ body {
 
 
 
+
+
 .drop-title {
 
 
@@ -736,6 +944,8 @@ body {
 
 
 
+
+
 .drop-panel {
 
 
@@ -746,15 +956,20 @@ body {
 
 
 
+
     background:
+
 
         rgba(255,255,255,.03);
 
 
 
+
     border:
 
+
         1px solid rgba(255,255,255,.10);
+
 
 
 
@@ -762,16 +977,24 @@ body {
 
 
 
+
     backdrop-filter:blur(8px);
+
+
+    -webkit-backdrop-filter:blur(8px);
 
 
 
     display:flex;
 
+
     flex-direction:column;
 
 
 }
+
+
+
 
 
 
@@ -792,20 +1015,28 @@ body {
     opacity:.6;
 
 
+
     font-size:11px;
+
 
 
 
     border-bottom:
 
+
         1px solid rgba(255,255,255,.08);
+
 
 
 
     margin-bottom:6px;
 
 
+
 }
+
+
+
 
 
 
@@ -822,7 +1053,9 @@ body {
 
 
 
+
     max-height:240px;
+
 
 
 
@@ -837,7 +1070,6 @@ body {
 
 
 
-/* scrollbar */
 
 
 .drop-log::-webkit-scrollbar {
@@ -850,10 +1082,13 @@ body {
 
 
 
+
+
 .drop-log::-webkit-scrollbar-thumb {
 
 
     background:
+
 
         rgba(255,255,255,.15);
 
@@ -866,6 +1101,8 @@ body {
 
 
 
+
+
 .drop-log::-webkit-scrollbar-track {
 
 
@@ -873,6 +1110,9 @@ body {
 
 
 }
+
+
+
 
 
 
@@ -891,9 +1131,12 @@ body {
 
 
 
+
     background:
 
+
         rgba(255,255,255,.02);
+
 
 
 
@@ -901,6 +1144,7 @@ body {
 
 
         1px solid rgba(255,255,255,.06);
+
 
 
 
@@ -912,7 +1156,15 @@ body {
 
 
 
-/* ================= TOOLTIP ================= */
+
+
+
+
+
+/* ===================================================== */
+/* ================= TOOLTIP ============================ */
+/* ===================================================== */
+
 
 
 .tooltip {
@@ -921,10 +1173,14 @@ body {
     position:fixed;
 
 
+
     z-index:999999;
 
 
+
     pointer-events:none;
+
+
 
 
 
@@ -935,6 +1191,7 @@ body {
 
 
 
+
     border:
 
 
@@ -942,7 +1199,9 @@ body {
 
 
 
+
     padding:10px;
+
 
 
 
@@ -950,7 +1209,9 @@ body {
 
 
 
+
     font-size:12px;
+
 
 
 
@@ -958,11 +1219,15 @@ body {
 
 
 
+
+
     opacity:0;
 
 
 
+
     transform:scale(.98);
+
 
 
 
@@ -971,44 +1236,623 @@ body {
 
         opacity .12s ease,
 
+
         transform .12s ease;
 
 
 }
-/* ================= FOOTER ================= */
+
+
+
+
+
+
+
+
+
+
+/* ===================================================== */
+/* ================= FOOTER ============================= */
+/* ===================================================== */
+
+
 
 .site-footer {
-    width: 100%;
-    text-align: center;
 
-    margin-top: 12px;
-    padding: 6px 0 8px;
 
-    font-size: 10px;
-    line-height: 1.4;
+    width:100%;
 
-    opacity: 0.55;
 
-    color: #eaeaea;
 
-    background: rgba(255,255,255,0.015);
-    border-top: 1px solid rgba(255,255,255,0.05);
+    text-align:center;
 
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+
+
+
+    margin-top:12px;
+
+
+
+    padding:6px 0 8px;
+
+
+
+
+
+    font-size:10px;
+
+
+
+    line-height:1.4;
+
+
+
+
+
+    opacity:.55;
+
+
+
+
+    color:#eaeaea;
+
+
+
+
+
+    background:
+
+
+        rgba(255,255,255,.015);
+
+
+
+
+
+    border-top:
+
+
+        1px solid rgba(255,255,255,.05);
+
+
+
+
+
+    backdrop-filter:blur(6px);
+
+
+
+    -webkit-backdrop-filter:blur(6px);
+
+
+
 }
+
+
+
+
 
 .site-footer div:first-child {
-    margin-bottom: 2px;
+
+
+    margin-bottom:2px;
+
+
 }
+
+
+
+
 
 .site-footer a {
-    color: inherit;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
+
+
+    color:inherit;
+
+
+
+    text-decoration:none;
+
+
+
+    transition:opacity .2s ease;
+
+
 }
 
+
+
+
+
 .site-footer a:hover {
-    opacity: 0.75;
-    text-decoration: underline;
+
+
+    opacity:.75;
+
+
+    text-decoration:underline;
+
+
+}
+
+
+/* ===================================================== */
+/* ================= MOBILE RESPONSIVE ================= */
+/* ===================================================== */
+
+
+@media (max-width:900px){
+
+
+
+
+
+    /* ================= GENERAL ================= */
+
+
+    body {
+
+        overflow-x:hidden;
+
+    }
+
+
+
+    .dashboard {
+
+
+        width:100%;
+
+
+        box-sizing:border-box;
+
+
+        padding:10px;
+
+
+        gap:18px;
+
+
+    }
+
+
+
+
+
+
+
+
+    /* ================= BANNER ================= */
+
+
+    .banner {
+
+
+        height:auto;
+
+
+        max-height:140px;
+
+
+        padding:0 10px;
+
+
+        box-sizing:border-box;
+
+
+    }
+
+
+
+
+    .banner img {
+
+
+        width:100%;
+
+
+        height:auto;
+
+
+        object-fit:contain;
+
+
+    }
+
+
+
+
+
+
+
+
+    /* ================================================= */
+    /* ================= TEAM SWIPE ==================== */
+    /* ================================================= */
+
+
+    .team-pages {
+
+
+        width:100%;
+
+
+        display:flex;
+
+
+        flex-direction:row;
+
+
+        justify-content:flex-start;
+
+
+        overflow-x:auto;
+
+
+        overflow-y:hidden;
+
+
+
+        gap:0;
+
+
+
+        scroll-snap-type:x mandatory;
+
+
+
+        -webkit-overflow-scrolling:touch;
+
+
+
+        scrollbar-width:none;
+
+
+
+    }
+
+
+
+
+
+    .team-pages::-webkit-scrollbar {
+
+
+        display:none;
+
+
+    }
+
+
+
+
+
+
+
+    .team-page {
+
+
+        flex:0 0 100%;
+
+
+
+        width:100%;
+
+
+
+        scroll-snap-align:center;
+
+
+
+        display:flex;
+
+
+
+        flex-direction:column;
+
+
+
+        align-items:center;
+
+
+
+        gap:14px;
+
+
+    }
+
+
+
+
+
+
+
+
+    /* ================= TEAM CARD ===================== */
+
+
+    .team-card {
+
+
+        width:95%;
+
+
+        max-width:408px;
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+    /* ================= BOARD ========================= */
+
+
+    .board-wrapper {
+
+
+        align-items:center;
+
+
+        width:100%;
+
+
+    }
+
+
+
+
+
+
+    .board-layout {
+
+
+        justify-content:center;
+
+
+        width:100%;
+
+
+    }
+
+
+
+
+
+
+
+
+    .board {
+
+
+        width:min(320px,82vw);
+
+
+    }
+
+
+
+
+
+
+
+    .tile {
+
+
+        width:
+
+        calc((min(320px,82vw) - 40px) / 5);
+
+
+
+        height:
+
+        calc((min(320px,82vw) - 40px) / 5);
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /* ================= BINGO ========================= */
+
+
+    .bingo-side {
+
+
+        grid-template-rows:
+
+
+        repeat(
+
+            5,
+
+            calc((min(320px,82vw) - 40px) / 5)
+
+        );
+
+
+    }
+
+
+
+
+
+    .bingo-bottom {
+
+
+        grid-template-columns:
+
+
+        repeat(
+
+            5,
+
+            calc((min(320px,82vw) - 40px) / 5)
+
+        );
+
+
+    }
+
+
+
+
+
+    .bingo-box {
+
+
+        width:
+
+
+        calc((min(320px,82vw) - 40px) / 5);
+
+
+
+        height:
+
+
+        calc((min(320px,82vw) - 40px) / 5);
+
+
+
+        font-size:8px;
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /* ================= DROP LOG ====================== */
+
+
+    .drop-title {
+
+
+        width:95%;
+
+
+    }
+
+
+
+
+
+    .drop-panel {
+
+
+        width:95%;
+
+
+        box-sizing:border-box;
+
+
+    }
+
+
+
+
+
+    .drop-header,
+
+
+    .drop-item {
+
+
+        grid-template-columns:
+
+
+            90px 1fr 60px;
+
+
+    }
+
+
+
+}
+/* ===================================================== */
+/* ================= TEAM SWIPE DOTS =================== */
+/* ===================================================== */
+
+
+.team-dots {
+
+    display:none;
+
+    justify-content:center;
+
+    gap:8px;
+
+    margin-top:-4px;
+
+}
+
+
+
+.team-dot {
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+
+    background:
+
+        rgba(255,255,255,.25);
+
+
+    transition:.25s ease;
+
+}
+
+
+
+.team-dot.active {
+
+    width:22px;
+
+    border-radius:8px;
+
+
+    background:
+
+        rgba(255,255,255,.75);
+
+}
+
+
+
+
+
+
+@media (max-width:900px){
+
+
+    .team-dots {
+
+        display:flex;
+
+    }
+
+
 }
