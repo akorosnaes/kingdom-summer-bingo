@@ -257,7 +257,7 @@ const CONFIG = {
         { name:"Doom", desc:"2 Eye of ayak or Treads [20]" },
 
         { name:"Phosani's Nightmare", desc:"2 Non-Orb drops (No Egg/Pet/Jar) [30]" },
-        { name:"Abyssal Sire", desc:"8 Unsired [18" },
+        { name:"Abyssal Sire", desc:"8 Unsired [18]" },
         { name:"God Wars Dungeon", desc:"2 Unique hilts (No Ancient Hilt) [32]" },
         { name:"Yama", desc:"2 Unique Oathplate [28]" },
         { name:"Brutus", desc:"4 Pets [16]" }
