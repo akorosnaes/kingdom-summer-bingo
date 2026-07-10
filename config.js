@@ -76,13 +76,13 @@ const CONFIG = {
 
 
         27, // Tile 11
-        19, // Tile 12
+        17, // Tile 12
         23, // Tile 13
         22, // Tile 14
         35, // Tile 15
 
 
-        17, // Tile 16
+        19, // Tile 16
         24, // Tile 17
         29, // Tile 18
         28, // Tile 19
@@ -245,12 +245,12 @@ const CONFIG = {
         { name:"Maggot King", desc:"2 Crimson Kistens [33]" },
 
         { name:"King Black Dragon", desc:"Dragonic visage or Pet [27]" },
-        { name:"Phantom Muspah", desc:"5 Venator shards [19]" },
+        { name:"Nex", desc:"2 Uniques (Max 5 players in instance) [17]" },
         { name:"Cerberus", desc:"3 Smouldering stones or Jar of Souls [23]" },
         { name:"Grotesque Guardians", desc:"2 Granite hammers [22]" },
         { name:"Theatre of Blood", desc:"6 Points (4 Scythe, 3 Sang/Rapier, 2 Justiciar/Dust, 1 Avernic/Kit/Pet [35]" },
 
-        { name:"Nex", desc:"2 Uniques (Max 5 players in instance) [17]" },
+        { name:"Phantom Muspah", desc:"5 Venator shards [19]" },
         { name:"Leviathan/Whisperer", desc:"3 Chromium ingots [24]" },
         { name:"Zulrah", desc:"3 Uncut Onyx or Mutagens [29]" },
         { name:"Tombs of Amascut: Expert", desc:"4 Purples [28]" },
