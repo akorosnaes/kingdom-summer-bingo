@@ -1191,7 +1191,7 @@ function updateDropLog(drops){
 
 
 
-            el.appendChild(
+            el.prepend(
                 row
             );
 
